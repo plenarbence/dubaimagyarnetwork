@@ -1,21 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
 
-# 🔹 belső importok az új struktúrához igazítva
 from database import Base, engine
 from routes import auth
 
-# FastAPI példány létrehozása
-app = FastAPI()
+# -----------------------------
+# ✅ Környezeti változók betöltése (.env.local)
+# -----------------------------
+load_dotenv(".env.local")
 
-# -------------------------------
-# ✅ CORS engedélyezése a frontendhez
-# -------------------------------
-origins = [
-    "http://localhost:3000",                  # helyi fejlesztéshez
-    "https://dev.dubaimagyarnetwork.com",     # dev frontend
-    "https://dubaimagyarnetwork.com"          # prod frontend
-]
+# -----------------------------
+# ✅ FastAPI app létrehozása
+# -----------------------------
+app = FastAPI(title="Dubai Magyar Network API", version="1.0-dev")
+
+# -----------------------------
+# ✅ CORS beállítás (.env-ből)
+# -----------------------------
+origins = [os.getenv("CORS_ORIGINS", "*")]
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,22 +29,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -------------------------------
-# ✅ adatbázis inicializálása
-# -------------------------------
-try:
-    Base.metadata.create_all(bind=engine)
-except Exception as e:
-    print(f"⚠️ DB init error: {e}")
+# -----------------------------
+# ✅ Adatbázis inicializálás
+# -----------------------------
+Base.metadata.create_all(bind=engine)
 
-# -------------------------------
-# ✅ auth endpointok regisztrálása
-# -------------------------------
+# -----------------------------
+# ✅ Route-ok regisztrálása
+# -----------------------------
 app.include_router(auth.router)
 
-# -------------------------------
-# ✅ teszt endpoint
-# -------------------------------
+# -----------------------------
+# ✅ Teszt endpoint
+# -----------------------------
 @app.get("/")
 def read_root():
-    return {"message": "Backend működik ✅"}
+    return {"message": "Backend működik ✅", "environment": os.getenv("CORS_ORIGINS")}
