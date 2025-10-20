@@ -19,7 +19,8 @@ app = FastAPI(title="Dubai Magyar Network API", version="1.0-dev")
 # -----------------------------
 # ✅ CORS beállítás (.env-ből)
 # -----------------------------
-origins = [os.getenv("CORS_ORIGINS", "*")]
+origins = os.getenv("CORS_ORIGINS", "*").split(",")
+
 
 app.add_middleware(
     CORSMiddleware,
