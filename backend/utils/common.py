@@ -6,6 +6,11 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv(".env.local")
+
 
 # ===============================
 # 🔐 JELSZÓ HASH & ELLENŐRZÉS
@@ -36,7 +41,10 @@ def validate_password(password: str) -> None:
 # ===============================
 # 🔑 JWT TOKEN GENERÁLÁS / VALIDÁLÁS
 # ===============================
-SECRET_KEY = "very_secret_key_please_change_this"
+SECRET_KEY = os.getenv("JWT_SECRET")
+if not SECRET_KEY:
+    raise RuntimeError("❌ JWT_SECRET hiányzik az .env.local fájlból!")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -54,13 +62,13 @@ def verify_access_token(token: str = Depends(oauth2_scheme)):
     """JWT token dekódolása és ellenőrzése"""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
+        subject = payload.get("sub")
+        if subject is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",
             )
-        return email
+        return subject
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

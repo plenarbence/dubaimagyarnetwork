@@ -76,7 +76,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         )
 
     # token generálása
-    access_token = create_access_token(data={"sub": user.email})
+    access_token = create_access_token(data={"sub": user.email, "role": "user"})
 
     return {"access_token": access_token, "token_type": "bearer"}
 
