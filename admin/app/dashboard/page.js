@@ -8,7 +8,6 @@ export default function DashboardPage() {
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    // csak akkor fusson, amikor a böngészőben vagyunk
     if (typeof window === "undefined") return;
 
     const token = localStorage.getItem("admin_token");
@@ -16,7 +15,6 @@ export default function DashboardPage() {
     if (!token) {
       router.replace("/login");
     } else {
-      // setState-et timeouton belül hívunk → nem triggerel cascade render warningot
       setTimeout(() => setAuthorized(true), 0);
     }
   }, [router]);
@@ -47,15 +45,50 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        <p className="text-gray-600">
-          Üdv, admin! Innen fogod tudni kezelni a felhasználókat, tartalmakat
-          és más beállításokat. 📊
+        <p className="text-gray-600 mb-8">
+          Üdv, admin! Innen tudod kezelni a felhasználókat, tartalmakat és más beállításokat. 📊
         </p>
 
+        {/* --- ÚJ RÉSZ: szerkeszthető oldalak --- */}
+        <div className="space-y-3">
+          <h2 className="text-xl font-semibold mb-2">Szerkeszthető tartalmak</h2>
+
+          <button
+            onClick={() => router.push("/dashboard/terms")}
+            className="w-full text-left border rounded-lg p-4 hover:bg-gray-50 transition"
+          >
+            <span className="text-lg font-medium">Terms & Conditions</span>
+            <p className="text-sm text-gray-500">Oldal tartalmának szerkesztése</p>
+          </button>
+
+          <button
+            onClick={() => router.push("/dashboard/privacy")}
+            className="w-full text-left border rounded-lg p-4 hover:bg-gray-50 transition"
+          >
+            <span className="text-lg font-medium">Privacy Policy</span>
+            <p className="text-sm text-gray-500">Oldal tartalmának szerkesztése</p>
+          </button>
+
+          <button
+            onClick={() => router.push("/dashboard/providers")}
+            className="w-full text-left border rounded-lg p-4 hover:bg-gray-50 transition"
+          >
+            <span className="text-lg font-medium">Providers</span>
+            <p className="text-sm text-gray-500">Oldal tartalmának szerkesztése</p>
+          </button>
+
+          <button
+            onClick={() => router.push("/dashboard/contact")}
+            className="w-full text-left border rounded-lg p-4 hover:bg-gray-50 transition"
+          >
+            <span className="text-lg font-medium">Contact</span>
+            <p className="text-sm text-gray-500">Oldal tartalmának szerkesztése</p>
+          </button>
+        </div>
+
+        {/* --- korábbi placeholder --- */}
         <div className="mt-8 p-4 border border-gray-200 rounded bg-gray-50">
-          <p className="text-gray-500">
-            (Hamarosan ide jön a felhasználó-listázó modul.)
-          </p>
+          <p className="text-gray-500">(Hamarosan ide jön a felhasználó-listázó modul.)</p>
         </div>
       </div>
     </div>

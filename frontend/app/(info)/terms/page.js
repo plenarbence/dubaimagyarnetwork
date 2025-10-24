@@ -1,66 +1,46 @@
-// app/terms/page.js
+"use client";
+
+import { useEffect, useState } from "react";
 
 export default function TermsPage() {
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    async function loadContent() {
+      try {
+        const res = await fetch(`${API_URL}/content/terms`, { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          setContent(data.value || "");
+        } else {
+          setContent("⚠️ A Terms tartalom jelenleg nem elérhető.");
+        }
+      } catch {
+        setContent("⚠️ Hiba történt a tartalom betöltése közben.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadContent();
+  }, [API_URL]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-500">
+        Betöltés...
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold mb-6">Felhasználási feltételek</h1>
-
-      <p className="mb-4">
-        A jelen weboldalt üzemelteti: <strong>REPLACE_WITH_COMPANY_NAME</strong>.
-        Székhely: <strong>REPLACE_WITH_COMPANY_ADDRESS</strong>.
-        Kapcsolat: <strong>REPLACE_WITH_COMPANY_EMAIL</strong>.
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">1. A szolgáltatás jellege</h2>
-      <p className="mb-4">
-        A dubaimagyarnetwork.com egy közvetítő platform, amely lehetőséget biztosít
-        szolgáltatók és hirdetők számára hirdetések megjelenítésére. A platform célja
-        kapcsolatépítés és információközlés; az üzemeltető nem vállal garanciát a
-        hirdetésekben szereplő szolgáltatások minőségére, jogszerűségére vagy teljesítésére.
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">2. Hirdetői felelősség</h2>
-      <p className="mb-4">
-        A hirdetést feladó személy vagy jogi személy (a továbbiakban: Hirdető) teljes
-        felelősséggel tartozik a feltöltött tartalomért, képekért, ártáblázatokért és
-        bármilyen olyan állításért, amely megtévesztő lehet. A Hirdetőnek biztosítania kell,
-        hogy a tevékenysége megfelel a helyi jogszabályoknak és engedélyeknek (pl. Trade License).
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">3. Üzemeltető jogai</h2>
-      <p className="mb-4">
-        Az üzemeltető fenntartja magának a jogot, hogy bármely hirdetést módosítson,
-        elrejtessen vagy töröljön, illetve a szolgáltatást részben vagy egészben
-        felfüggessze, különösebb indoklás nélkül, amennyiben az oldal működését vagy más
-        felhasználók jogait sérti.
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">4. Fizetések és visszatérítések</h2>
-      <p className="mb-4">
-        Amennyiben a platformon fizetés történik (pl. hirdetés listázási díj), a fizetések
-        feldolgozását harmadik fél (pl. Stripe) végzi. A visszatérítési szabályokat a
-        konkrét fizetési/előfizetési folyamatnál részletezzük — alapértelmezésben a díjak
-        nem visszatéríthetők, kivéve külön írásos megállapodás esetén.
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">5. Felelősségkorlátozás</h2>
-      <p className="mb-4">
-        Az üzemeltető semmilyen közvetlen, közvetett vagy következményi kárt nem vállal a
-        platform használatából eredően, beleértve bevételkiesést, adatvesztést vagy
-        harmadik féllel kapcsolatos vitákat. Bármilyen jogvita esetén a felek elsőként
-        egyeztetést kötelesek kezdeményezni.
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">6. Alkalmazandó jog</h2>
-      <p className="mb-4">
-        A jelen feltételekre a szolgáltatás nyújtásának helye szerinti jog (REPLACE_WITH_APPLICABLE_JURISDICTION)
-        az irányadó. (Például: Dubai, United Arab Emirates.)
-      </p>
-
-      <p className="mt-10 text-sm text-gray-600">
-        Üzemeltető: <strong>REPLACE_WITH_COMPANY_NAME</strong> · Licence: <strong>REPLACE_WITH_TRADE_LICENSE</strong><br />
-        Utolsó frissítés: 2025-10-03
-      </p>
+    <div className="max-w-3xl mx-auto p-6 prose prose-lg">
+      <div
+        className="text-gray-700 leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   );
 }
