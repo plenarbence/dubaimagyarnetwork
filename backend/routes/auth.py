@@ -1,10 +1,11 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from database import SessionLocal
 from models.user import User
-from schemas.user_schema import UserCreate
+from schemas.user_schema import UserCreate, UserResponse
 from utils.common import (
     validate_password,
     hash_password,
@@ -30,7 +31,7 @@ def get_db():
 # ================================
 # ✅ REGISZTRÁCIÓ
 # ================================
-@router.post("/register")
+@router.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     # 1️⃣ Ellenőrzés: van-e már ilyen e-mail
     existing_user = db.query(User).filter(User.email == user.email).first()
@@ -46,13 +47,13 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     # 3️⃣ Jelszó hash-elése
     hashed_pw = hash_password(user.password)
 
-    # 4️⃣ Új user mentése adatbázisba
+    # 4️⃣ Új user mentése adatbázisba (is_verified alapból False)
     new_user = User(email=user.email, password_hash=hashed_pw)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
-    return {"message": "Sikeres regisztráció", "user_id": new_user.id}
+    return new_user
 
 
 # ================================
@@ -75,7 +76,12 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             detail="Hibás e-mail vagy jelszó.",
         )
 
-    # token generálása
+    # 1️⃣ Last login frissítése
+    user.last_login = datetime.utcnow()
+    db.commit()
+    db.refresh(user)
+
+    # 2️⃣ Token generálása
     access_token = create_access_token(data={"sub": user.email, "role": "user"})
 
     return {"access_token": access_token, "token_type": "bearer"}
@@ -84,6 +90,31 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 # ================================
 # ✅ AKTUÁLIS FELHASZNÁLÓ
 # ================================
-@router.get("/me")
-def get_current_user(email: str = Depends(verify_access_token)):
-    return {"current_user": email}
+@router.get("/me", response_model=UserResponse)
+def get_current_user(
+    email: str = Depends(verify_access_token),
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Felhasználó nem található.")
+    return user
+
+
+# ================================
+# ✅ EMAIL VERIFIKÁCIÓ (egyelőre manuális)
+# ================================
+@router.post("/verify-email")
+def verify_email(
+    current_email: str = Depends(verify_access_token),
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.email == current_email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Felhasználó nem található.")
+
+    user.is_verified = True
+    db.commit()
+    db.refresh(user)
+
+    return {"message": "Email verified successfully", "is_verified": user.is_verified}

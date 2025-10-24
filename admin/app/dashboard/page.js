@@ -92,6 +92,14 @@ export default function DashboardPage() {
             <span className="text-lg font-medium">Categories</span>
             <p className="text-sm text-gray-500">Struktura tartalmának szerkesztése</p>
           </button>
+
+          <button
+            onClick={() => router.push("/dashboard/users")}
+            className="w-full text-left border rounded-lg p-4 hover:bg-gray-50 transition"
+          >
+            <span className="text-lg font-medium">Users</span>
+            <p className="text-sm text-gray-500">Users list</p>
+          </button>
         </div>
 
         {/* --- korábbi placeholder --- */}

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
 
@@ -15,6 +16,9 @@ class UserCreate(BaseModel):
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
+    is_verified: bool
+    created_at: datetime | None = None
+    last_login: datetime | None = None
 
     class Config:
         from_attributes = True

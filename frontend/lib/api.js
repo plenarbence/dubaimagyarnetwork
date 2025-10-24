@@ -14,7 +14,6 @@ export async function registerUser(email, password) {
   });
 
   if (!res.ok) {
-    // 🔥 részletes hibaüzenet FastAPI-tól (pl. jelszó nem felel meg)
     let errMsg = `Registration failed (${res.status})`;
     try {
       const data = await res.json();
@@ -56,6 +55,34 @@ export async function loginUser(email, password) {
       if (text) errMsg = text;
     }
     throw new Error(errMsg);
+  }
+
+  return res.json();
+}
+
+// -----------------------------
+// ✅ EMAIL VERIFIKÁCIÓ
+// -----------------------------
+export async function verifyEmail(token) {
+  const res = await fetch(`${API_URL}/verify-email`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    let msg = `Email verification failed (${res.status})`;
+    try {
+      const data = await res.json();
+      if (data?.detail) msg = data.detail;
+    } catch {
+      const text = await res.text();
+      if (text) msg = text;
+    }
+    throw new Error(msg);
   }
 
   return res.json();
