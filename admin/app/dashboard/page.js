@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import AdminListingButton from "../components/AdminListingButton";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -100,12 +101,47 @@ export default function DashboardPage() {
             <span className="text-lg font-medium">Users</span>
             <p className="text-sm text-gray-500">Users list</p>
           </button>
+
+          <AdminListingButton
+            status="pending_admin"
+            label="Admin jóváhagyásra vár"
+            description="Hirdetések, amelyek még nem lettek elbírálva"
+            path="admin_pending"
+            highlight
+          />
+
+          <AdminListingButton
+            status="awaiting_payment"
+            label="Fizetésre vár"
+            description="Hirdetések, amelyek várják az inicialis fizetést"
+            path="awaiting_payment"
+          />
+
+          <AdminListingButton
+            status="rejected"
+            label="Visszadobott hirdetések"
+            description="Hirdetések, amelyeket módosítás után újra be kell küldeni"
+            path="rejected"
+          />
+
+          <AdminListingButton
+            status="active"
+            label="Aktív hirdetések"
+            description="Jelenleg élő és publikált hirdetések"
+            path="active"
+          />
+
+          <AdminListingButton
+            status="expired"
+            label="Lejárt hirdetések"
+            description="Hirdetések, amelyek lejártak és nem aktívak"
+            path="expired"
+          />
+
+
         </div>
 
-        {/* --- korábbi placeholder --- */}
-        <div className="mt-8 p-4 border border-gray-200 rounded bg-gray-50">
-          <p className="text-gray-500">(Hamarosan ide jön a felhasználó-listázó modul.)</p>
-        </div>
+        
       </div>
     </div>
   );

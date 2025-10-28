@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 
 from database import Base, engine
-from routes import auth, admin, content, categories, users
+from routes import auth, admin, content, categories, users, listings
 
 # -----------------------------
 # ✅ Környezeti változók betöltése (.env.local)
@@ -43,6 +43,7 @@ app.include_router(admin.router)
 app.include_router(content.router)
 app.include_router(categories.router)
 app.include_router(users.router)
+app.include_router(listings.router)
 
 # -----------------------------
 # ✅ Teszt endpoint

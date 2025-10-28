@@ -1,0 +1,181 @@
+from datetime import datetime
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, status, Body
+from sqlalchemy.orm import Session
+
+from database import SessionLocal
+from models.listing import Listing, ListingStatus
+from schemas.listing_schema import (
+    ListingCreate,
+    ListingResponse,
+    ListingAdminUpdate,
+)
+from routes.auth import get_current_user        # user-token validálás
+from routes.admin import get_current_admin      # admin-token validálás
+
+
+# -----------------------------
+# ✅ Router beállítása
+# -----------------------------
+router = APIRouter(prefix="/listings", tags=["Listings"])
+
+
+# -----------------------------
+# ✅ DB session kezelése
+# -----------------------------
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# ============================================================
+# ✅ USER – új listing létrehozása
+# ============================================================
+@router.post("/create", response_model=ListingResponse)
+def create_listing(
+    data: ListingCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    """Verified user új hirdetést hozhat létre (admin review előtt)."""
+
+    if not current_user.is_verified:
+        raise HTTPException(status_code=403, detail="A felhasználó nincs verifikálva.")
+
+    listing = Listing(
+        title=data.title,
+        description=data.description,
+        user_id=current_user.id,
+        status=ListingStatus.pending_admin,
+        created_at=datetime.utcnow(),
+    )
+    db.add(listing)
+    db.commit()
+    db.refresh(listing)
+    return listing
+
+
+# ============================================================
+# ✅ ADMIN – összes listing listázása
+# ============================================================
+@router.get("/all", response_model=List[ListingResponse])
+def get_all_listings(
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin),
+):
+    """Admin lekérheti az összes hirdetést (bármilyen státuszban)."""
+    listings = db.query(Listing).order_by(Listing.created_at.desc()).all()
+    return listings
+
+
+# ============================================================
+# ✅ ADMIN – adott listing frissítése (kategorizálás, jóváhagyás, visszadobás)
+# ============================================================
+@router.patch("/{listing_id}", response_model=ListingResponse)
+def update_listing(
+    listing_id: int,
+    update_data: ListingAdminUpdate,
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin),
+):
+    listing = db.query(Listing).filter(Listing.id == listing_id).first()
+    if not listing:
+        raise HTTPException(status_code=404, detail="Listing nem található.")
+
+    # mezők frissítése
+    if update_data.category_id is not None:
+        listing.category_id = update_data.category_id
+
+    if update_data.status is not None:
+        listing.status = update_data.status
+
+        if update_data.status == ListingStatus.awaiting_payment:
+            listing.approved_at = datetime.utcnow()
+
+        elif update_data.status == ListingStatus.active:
+            listing.published_at = datetime.utcnow()
+            # a fizetési logika később jön, most csak aktiváljuk
+            listing.visibility_until = datetime.utcnow().replace(microsecond=0)
+
+    if update_data.admin_comment is not None:
+        listing.admin_comment = update_data.admin_comment
+
+    db.commit()
+    db.refresh(listing)
+    return listing
+
+
+# ============================================================
+# ✅ USER – saját listingjeinek lekérése
+# ============================================================
+@router.get("/my", response_model=List[ListingResponse])
+def get_my_listings(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    """Bejelentkezett user saját hirdetéseit látja."""
+    listings = (
+        db.query(Listing)
+        .filter(Listing.user_id == current_user.id)
+        .order_by(Listing.created_at.desc())
+        .all()
+    )
+    return listings
+
+
+# ============================================================
+# ✅ USER – státusz módosítás (biztonságosan, saját hirdetésre)
+# ============================================================
+@router.patch("/my/{listing_id}/status", response_model=ListingResponse)
+def user_update_listing_status(
+    listing_id: int,
+    new_status: str = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    """
+    Felhasználó saját hirdetésének státuszát módosíthatja.
+    Csak engedett státuszváltásokat támogat.
+    """
+    listing = (
+        db.query(Listing)
+        .filter(Listing.id == listing_id, Listing.user_id == current_user.id)
+        .first()
+    )
+
+    if not listing:
+        raise HTTPException(status_code=404, detail="Hirdetés nem található vagy nincs jogosultság.")
+
+    allowed_transitions = {
+        ListingStatus.rejected: [ListingStatus.pending_admin],
+        ListingStatus.awaiting_payment: [ListingStatus.active],
+        ListingStatus.active: [ListingStatus.pending_admin],
+        ListingStatus.expired: [ListingStatus.pending_admin],
+    }
+
+    current = listing.status
+    try:
+        target = ListingStatus(new_status)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Érvénytelen státuszérték.")
+
+    if target not in allowed_transitions.get(current, []):
+        raise HTTPException(
+            status_code=403,
+            detail=f"Ez a státuszváltás nem engedélyezett: {current} → {target}",
+        )
+
+    listing.status = target
+
+    # extra események (pl. publikálás dátuma)
+    if target == ListingStatus.active:
+        listing.published_at = datetime.utcnow()
+        listing.visibility_until = datetime.utcnow().replace(microsecond=0)
+
+    db.commit()
+    db.refresh(listing)
+    return listing

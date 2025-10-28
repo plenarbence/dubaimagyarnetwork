@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser, verifyEmail } from "@/lib/api";
+import UserListingButton from "@/components/UserListingButton";
+
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -10,6 +12,14 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [verifying, setVerifying] = useState(false);
+
+  // Például majd ide jöhet az API hívás, ami lekéri a hirdetések számát
+  const [counts, setCounts] = useState({
+    active: 0,
+    pending_admin: 0,
+    pending_user: 0,
+    expired: 0,
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,7 +31,7 @@ export default function ProfilePage() {
     const fetchUser = async () => {
       try {
         const data = await getCurrentUser(token);
-        setUser(data); // már UserResponse jön vissza, nem data.current_user
+        setUser(data);
       } catch (err) {
         setError("Érvénytelen vagy lejárt token. Jelentkezz be újra.");
         localStorage.removeItem("token");
@@ -74,19 +84,21 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md text-center">
+      {/* ---------- PROFIL BLOKK ---------- */}
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md text-center mb-8">
         <h1 className="text-3xl font-semibold mb-6 text-gray-800">Profil</h1>
         <p className="text-gray-700 mb-2">E-mail:</p>
         <p className="font-medium text-lg mb-6">{user.email}</p>
 
         {user.is_verified ? (
           <>
-            <p className="text-green-600 font-medium mb-4">
+            <p className="text-green-600 font-medium mb-6">
               ✅ E-mail címed verifikálva
             </p>
+
             <button
               onClick={handleLogout}
-              className="mt-4 bg-black text-white py-2 px-4 rounded hover:opacity-90 transition"
+              className="w-full bg-gray-700 text-white py-2 px-4 rounded hover:opacity-90 transition"
             >
               Kijelentkezés
             </button>
@@ -100,9 +112,9 @@ export default function ProfilePage() {
               <button
                 onClick={handleVerify}
                 disabled={verifying}
-                className="bg-blue-600 text-white py-2 px-4 rounded hover:opacity-90 transition disabled:opacity-60"
+                className="bg-gray-700 text-white py-2 px-4 rounded hover:opacity-90 transition disabled:opacity-60"
               >
-                {verifying ? "Verifikálás..." : "Verify email"}
+                {verifying ? "Verifikálás..." : "E-mail verifikálása"}
               </button>
               <button
                 onClick={handleLogout}
@@ -114,6 +126,53 @@ export default function ProfilePage() {
           </>
         )}
       </div>
+
+      {/* ---------- HIRDETÉSEIM BLOKK ---------- */}
+      {user.is_verified && (
+        <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md text-center">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+            Hirdetéseim
+          </h2>
+
+          <div className="flex flex-col gap-3">
+            {/* Új hirdetés gomb marad */}
+            <button
+              onClick={() => router.push("/profile/create_listing")}
+              className="bg-gray-700 text-white py-2 rounded hover:opacity-90 transition"
+            >
+              Új hirdetés feltöltése
+            </button>
+
+            {/* Dinamikus státusz gombok */}
+            <UserListingButton
+              status="active"
+              label="Aktív hirdetések"
+              path="active"
+            />
+
+            <UserListingButton
+              status="pending_admin"
+              label="Admin jóváhagyásra vár"
+              path="pending_admin"
+            />
+
+            <UserListingButton
+              status={["awaiting_payment", "rejected"]}
+              label="Felhasználói jóváhagyásra vár"
+              path="pending_user"
+              highlight
+            />
+
+
+            <UserListingButton
+              status="expired"
+              label="Lejárt hirdetések"
+              path="expired"
+            />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
