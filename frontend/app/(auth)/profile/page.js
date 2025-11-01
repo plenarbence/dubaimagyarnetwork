@@ -140,7 +140,7 @@ export default function ProfilePage() {
               onClick={() => router.push("/profile/create_listing")}
               className="bg-gray-700 text-white py-2 rounded hover:opacity-90 transition"
             >
-              Új hirdetés feltöltése
+              Új hirdetés létrehozása
             </button>
 
             {/* Dinamikus státusz gombok */}
@@ -157,7 +157,7 @@ export default function ProfilePage() {
             />
 
             <UserListingButton
-              status={["awaiting_payment", "rejected"]}
+              status={["awaiting_payment", "rejected", "draft"]}
               label="Felhasználói jóváhagyásra vár"
               path="pending_user"
               highlight

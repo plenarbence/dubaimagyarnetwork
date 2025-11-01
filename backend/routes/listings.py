@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status, Body
 from sqlalchemy.orm import Session
@@ -41,7 +41,7 @@ def create_listing(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    """Verified user új hirdetést hozhat létre (admin review előtt)."""
+    """Verified user új hirdetést hozhat létre. Alapértelmezés: draft státusz."""
 
     if not current_user.is_verified:
         raise HTTPException(status_code=403, detail="A felhasználó nincs verifikálva.")
@@ -50,9 +50,23 @@ def create_listing(
         title=data.title,
         description=data.description,
         user_id=current_user.id,
-        status=ListingStatus.pending_admin,
+        status=ListingStatus.draft,
         created_at=datetime.utcnow(),
+        # opcionális kontaktadatok
+        email=data.email,
+        phone_number=data.phone_number,
+        website=data.website,
+        whatsapp=data.whatsapp,
+        instagram=data.instagram,
+        tiktok=data.tiktok,
+        facebook=data.facebook,
+        youtube=data.youtube,
+        location=data.location,
+        # új mezők
+        company=data.company,
+        tags=data.tags if isinstance(data.tags, list) else [],
     )
+
     db.add(listing)
     db.commit()
     db.refresh(listing)
@@ -69,6 +83,12 @@ def get_all_listings(
 ):
     """Admin lekérheti az összes hirdetést (bármilyen státuszban)."""
     listings = db.query(Listing).order_by(Listing.created_at.desc()).all()
+
+    # védelem: tags mindig lista legyen
+    for listing in listings:
+        if not isinstance(listing.tags, list):
+            listing.tags = []
+
     return listings
 
 
@@ -98,7 +118,6 @@ def update_listing(
 
         elif update_data.status == ListingStatus.active:
             listing.published_at = datetime.utcnow()
-            # a fizetési logika később jön, most csak aktiváljuk
             listing.visibility_until = datetime.utcnow().replace(microsecond=0)
 
     if update_data.admin_comment is not None:
@@ -106,6 +125,11 @@ def update_listing(
 
     db.commit()
     db.refresh(listing)
+
+    # biztos ami biztos: tags mindig lista
+    if not isinstance(listing.tags, list):
+        listing.tags = []
+
     return listing
 
 
@@ -117,13 +141,19 @@ def get_my_listings(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    """Bejelentkezett user saját hirdetéseit látja."""
+    """Bejelentkezett user saját hirdetéseit látja (beleértve a draftokat is)."""
     listings = (
         db.query(Listing)
         .filter(Listing.user_id == current_user.id)
         .order_by(Listing.created_at.desc())
         .all()
     )
+
+    # védelem: tags mindig lista legyen
+    for listing in listings:
+        if not isinstance(listing.tags, list):
+            listing.tags = []
+
     return listings
 
 
@@ -151,6 +181,7 @@ def user_update_listing_status(
         raise HTTPException(status_code=404, detail="Hirdetés nem található vagy nincs jogosultság.")
 
     allowed_transitions = {
+        ListingStatus.draft: [ListingStatus.pending_admin],
         ListingStatus.rejected: [ListingStatus.pending_admin],
         ListingStatus.awaiting_payment: [ListingStatus.active],
         ListingStatus.active: [ListingStatus.pending_admin],
@@ -178,4 +209,9 @@ def user_update_listing_status(
 
     db.commit()
     db.refresh(listing)
+
+    # biztos ami biztos: tags mindig lista
+    if not isinstance(listing.tags, list):
+        listing.tags = []
+
     return listing

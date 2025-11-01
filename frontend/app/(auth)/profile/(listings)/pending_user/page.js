@@ -1,17 +1,16 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import ListingCard from "@dubaimagyarnetwork/shared/components/ListingCard"; // ✅ shared import
 
 export default function PendingUserListingsPage() {
   const [awaiting, setAwaiting] = useState([]);
   const [rejected, setRejected] = useState([]);
+  const [drafts, setDrafts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  // --------------------------
-  // ✅ Hirdetések lekérése
-  // --------------------------
   const fetchListings = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
@@ -26,11 +25,11 @@ export default function PendingUserListingsPage() {
       });
 
       const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.detail || "Hiba történt a lekérés során.");
+      if (!res.ok) throw new Error(data.detail || "Hiba történt a lekérés során.");
 
       setAwaiting(data.filter((l) => l.status === "awaiting_payment"));
       setRejected(data.filter((l) => l.status === "rejected"));
+      setDrafts(data.filter((l) => l.status === "draft"));
     } catch (err) {
       setError(err.message || "Ismeretlen hiba.");
     } finally {
@@ -42,34 +41,6 @@ export default function PendingUserListingsPage() {
     fetchListings();
   }, [fetchListings]);
 
-  // --------------------------
-  // ✅ Állapotfrissítő segédfüggvény (új endpoint)
-  // --------------------------
-  const updateStatus = async (id, newStatus) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const res = await fetch(`${API_URL}/listings/my/${id}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ new_status: newStatus }),
-      });
-
-      if (!res.ok) throw new Error("Nem sikerült frissíteni a hirdetést.");
-
-      await fetchListings();
-    } catch (err) {
-      alert(err.message || "Hiba történt a frissítés során.");
-    }
-  };
-
-  // --------------------------
-  // ✅ Render
-  // --------------------------
   if (loading)
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -84,88 +55,31 @@ export default function PendingUserListingsPage() {
       </div>
     );
 
+  // 🔹 Szekció renderelő
+  const renderSection = (title, color, listings) => (
+    <section className="mb-10">
+      <h2 className={`text-xl font-semibold mb-4 ${color}`}>{title}</h2>
+      {listings.length === 0 ? (
+        <p className="text-gray-600 text-center">Nincs ilyen státuszú hirdetésed.</p>
+      ) : (
+        <div className="flex flex-wrap gap-5 justify-center">
+          {listings.map((l) => (
+            <ListingCard key={l.id} listing={l} linkTo={`/profile/preview/${l.id}`} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-6 text-center">
+    <div className="max-w-5xl mx-auto p-6">
+      <h1 className="text-2xl font-semibold mb-8 text-center">
         Felhasználói beavatkozást igénylő hirdetések
       </h1>
 
-      {/* ========== Awaiting Payment ========== */}
-      <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-4 text-yellow-700">
-          💳 Fizetésre váró hirdetések
-        </h2>
-
-        {awaiting.length === 0 ? (
-          <p className="text-gray-600 text-center">
-            Nincs fizetésre váró hirdetésed.
-          </p>
-        ) : (
-          <ul className="space-y-4">
-            {awaiting.map((listing) => (
-              <li
-                key={listing.id}
-                className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
-              >
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {listing.title}
-                </h3>
-                <p className="text-gray-600 mt-2">{listing.description}</p>
-                <p className="text-sm text-gray-500 mt-3">
-                  Jóváhagyva:{" "}
-                  {listing.approved_at
-                    ? new Date(listing.approved_at).toLocaleDateString("hu-HU")
-                    : "—"}
-                </p>
-                <button
-                  onClick={() => updateStatus(listing.id, "active")}
-                  className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-                >
-                  Fizetve (aktiválás)
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {/* ========== Rejected ========== */}
-      <section>
-        <h2 className="text-xl font-semibold mb-4 text-red-700">
-          ❌ Visszadobott hirdetések
-        </h2>
-
-        {rejected.length === 0 ? (
-          <p className="text-gray-600 text-center">
-            Nincs visszadobott hirdetésed.
-          </p>
-        ) : (
-          <ul className="space-y-4">
-            {rejected.map((listing) => (
-              <li
-                key={listing.id}
-                className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
-              >
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {listing.title}
-                </h3>
-                <p className="text-gray-600 mt-2">{listing.description}</p>
-                {listing.admin_comment && (
-                  <p className="text-sm text-red-500 mt-2 italic">
-                    Admin megjegyzés: {listing.admin_comment}
-                  </p>
-                )}
-                <button
-                  onClick={() => updateStatus(listing.id, "pending_admin")}
-                  className="mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-                >
-                  Újraküldés admin jóváhagyásra
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {renderSection("💳 Fizetésre váró hirdetések", "text-yellow-700", awaiting)}
+      {renderSection("❌ Visszadobott hirdetések", "text-red-700", rejected)}
+      {renderSection("📝 Mentett vázlatok", "text-blue-700", drafts)}
     </div>
   );
 }
