@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function CategorySelector({ onChange }) {
+export default function CategorySelector({ value, onChange }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [categories, setCategories] = useState([]);
   const [selectedParent, setSelectedParent] = useState("");
@@ -10,14 +10,25 @@ export default function CategorySelector({ onChange }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ Kategóriák betöltése
+  // ✅ ha kívülről jön (pl. betöltött listing) -> frissítjük a helyi state-et
+  useEffect(() => {
+    if (value) {
+      setSelectedParent(value.parentId || "");
+      setSelectedChild(value.childId || "");
+    }
+  }, [value]);
+
+  // ✅ kategóriák betöltése
   useEffect(() => {
     const loadCategories = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_URL}/categories`);
+        const res = await fetch(`${API_URL}/categories/`);
         const data = await res.json();
-        if (!res.ok) throw new Error(data?.detail || "Nem sikerült betölteni a kategóriákat.");
+        if (!res.ok)
+          throw new Error(
+            data?.detail || "Nem sikerült betölteni a kategóriákat."
+          );
         setCategories(data);
       } catch (err) {
         console.error("❌ Kategória betöltési hiba:", err);
@@ -26,11 +37,14 @@ export default function CategorySelector({ onChange }) {
         setLoading(false);
       }
     };
+
     loadCategories();
   }, [API_URL]);
 
   const parentCats = categories.filter((c) => c.parent_id === null);
-  const childCats = categories.filter((c) => c.parent_id === Number(selectedParent));
+  const childCats = categories.filter(
+    (c) => c.parent_id === Number(selectedParent)
+  );
 
   const handleParentChange = (id) => {
     setSelectedParent(id);
@@ -44,10 +58,18 @@ export default function CategorySelector({ onChange }) {
   };
 
   if (loading)
-    return <p className="text-sm text-gray-500 italic mt-4">Kategóriák betöltése...</p>;
+    return (
+      <p className="text-sm text-gray-500 italic mt-4">
+        Kategóriák betöltése...
+      </p>
+    );
 
   if (error)
-    return <p className="text-sm text-red-600 mt-4">{error}</p>;
+    return (
+      <p className="text-sm text-red-600 mt-4">
+        {error}
+      </p>
+    );
 
   return (
     <div className="mt-4">

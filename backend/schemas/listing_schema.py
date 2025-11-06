@@ -49,6 +49,8 @@ class ListingCreate(BaseModel):
         description="Opcionális kulcsszavak (max 5 db, max 50 karakter)"
     )
 
+    category_id: Optional[int] = None
+
 
 # ===========================
 # ✅ Admin update schema – kategorizálás / jóváhagyás

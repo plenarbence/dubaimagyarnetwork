@@ -1,14 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ContactFieldsManager({ form, onUpdate }) {
   const [added, setAdded] = useState(
-    Object.fromEntries(Object.keys(form).map((f) => [f, false]))
+    Object.fromEntries(Object.keys(form).map((f) => [f, !!form[f]]))
+  );
+  const [tempValues, setTempValues] = useState(
+    Object.fromEntries(Object.keys(form).map((f) => [f, form[f] || ""]))
   );
   const [statusMsg, setStatusMsg] = useState(
     Object.fromEntries(Object.keys(form).map((f) => [f, ""]))
   );
+
+  // ✅ ha betöltünk egy meglévő hirdetést, inicializáljuk az állapotokat
+  useEffect(() => {
+    setAdded(Object.fromEntries(Object.keys(form).map((f) => [f, !!form[f]])));
+    setTempValues(Object.fromEntries(Object.keys(form).map((f) => [f, form[f] || ""])));
+  }, [form]);
 
   // ✅ VALIDÁCIÓK
   const validators = {
@@ -83,12 +92,14 @@ export default function ContactFieldsManager({ form, onUpdate }) {
     }
   };
 
-  const handleChange = (field, value) => {
-    onUpdate((prev) => ({ ...prev, [field]: value }));
+  // ✅ csak a lokális input állapotot frissítjük gépeléskor
+  const handleTempChange = (field, value) => {
+    setTempValues((prev) => ({ ...prev, [field]: value }));
   };
 
+  // ✅ csak "Hozzáadás" után kerül be a fő formba
   const handleAdd = (field) => {
-    const val = form[field]?.trim() || "";
+    const val = tempValues[field]?.trim() || "";
     if (!val) {
       setStatusMsg((s) => ({ ...s, [field]: "❌ Üres mező." }));
       return;
@@ -100,12 +111,15 @@ export default function ContactFieldsManager({ form, onUpdate }) {
       return;
     }
 
+    onUpdate((prev) => ({ ...prev, [field]: val }));
     setAdded((a) => ({ ...a, [field]: true }));
     setStatusMsg((s) => ({ ...s, [field]: "✅ Hozzáadva!" }));
   };
 
+  // ✅ Elvetés gomb
   const handleRemove = (field) => {
     setAdded((a) => ({ ...a, [field]: false }));
+    setTempValues((v) => ({ ...v, [field]: "" }));
     onUpdate((prev) => ({ ...prev, [field]: "" }));
     setStatusMsg((s) => ({ ...s, [field]: "" }));
   };
@@ -120,10 +134,7 @@ export default function ContactFieldsManager({ form, onUpdate }) {
 
       case "phone":
         return (
-          <a
-            href={`tel:${value}`}
-            className="text-black font-medium break-all hover:underline"
-          >
+          <a href={`tel:${value}`} className="text-black font-medium break-all hover:underline">
             {value}
           </a>
         );
@@ -142,10 +153,7 @@ export default function ContactFieldsManager({ form, onUpdate }) {
 
       case "email":
         return (
-          <a
-            href={`mailto:${value}`}
-            className="text-black font-medium break-all hover:underline"
-          >
+          <a href={`mailto:${value}`} className="text-black font-medium break-all hover:underline">
             {value}
           </a>
         );
@@ -165,9 +173,7 @@ export default function ContactFieldsManager({ form, onUpdate }) {
       case "location":
         return (
           <a
-            href={`https://www.google.com/maps/search/${encodeURIComponent(
-              value
-            )}`}
+            href={`https://www.google.com/maps/search/${encodeURIComponent(value)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-black font-medium break-all hover:underline"
@@ -242,8 +248,8 @@ export default function ContactFieldsManager({ form, onUpdate }) {
               <input
                 type="text"
                 placeholder={getPlaceholder(field)}
-                value={form[field] || ""}
-                onChange={(e) => handleChange(field, e.target.value)}
+                value={tempValues[field] || ""}
+                onChange={(e) => handleTempChange(field, e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -276,9 +282,7 @@ export default function ContactFieldsManager({ form, onUpdate }) {
           {statusMsg[field] && (
             <p
               className={`text-sm mt-1 ${
-                statusMsg[field].includes("✅")
-                  ? "text-green-600"
-                  : "text-red-600"
+                statusMsg[field].includes("✅") ? "text-green-600" : "text-red-600"
               }`}
             >
               {statusMsg[field]}

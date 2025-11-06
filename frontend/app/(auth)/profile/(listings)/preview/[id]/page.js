@@ -28,7 +28,19 @@ export default function ListingPreviewPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-4">{listing.title}</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-semibold">{listing.title}</h1>
+        
+
+        {/* 🔹 Szerkesztés gomb */}
+        <a
+          href={`/profile/edit/${id}`}
+          className="bg-gray-800 text-white text-sm px-4 py-2 rounded hover:opacity-90 transition"
+        >
+          Szerkesztés
+        </a>
+      </div>
     </div>
   );
+
 }

@@ -215,3 +215,82 @@ def user_update_listing_status(
         listing.tags = []
 
     return listing
+
+
+
+
+
+# ============================================================
+# ✅ USER – saját listing frissítése (pl. cím, leírás, kontaktadatok)
+# ============================================================
+@router.patch("/my/{listing_id}", response_model=ListingResponse)
+def update_my_listing(
+    listing_id: int,
+    data: ListingCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    """
+    A bejelentkezett felhasználó frissítheti a SAJÁT hirdetését.
+    Csak a saját hirdetéseire van jogosultsága.
+    """
+
+    # ---- Saját hirdetés lekérdezése ----
+    listing = (
+        db.query(Listing)
+        .filter(Listing.id == listing_id, Listing.user_id == current_user.id)
+        .first()
+    )
+
+    if not listing:
+        raise HTTPException(
+            status_code=404,
+            detail="Hirdetés nem található vagy nincs jogosultság.",
+        )
+
+    # ---- Mezők frissítése ----
+    listing.title = data.title
+    listing.description = data.description
+    listing.company = data.company
+    listing.phone_number = data.phone_number
+    listing.email = data.email
+    listing.website = data.website
+    listing.location = data.location
+    listing.whatsapp = data.whatsapp
+    listing.instagram = data.instagram
+    listing.tiktok = data.tiktok
+    listing.facebook = data.facebook
+    listing.youtube = data.youtube
+    listing.tags = data.tags if isinstance(data.tags, list) else []
+    listing.category_id = data.category_id
+    listing.updated_at = datetime.utcnow()
+
+    db.commit()
+    db.refresh(listing)
+
+    # biztonság kedvéért
+    if not isinstance(listing.tags, list):
+        listing.tags = []
+
+    return listing
+
+
+
+# ============================================================
+# ✅ PUBLIKUS – adott hirdetés lekérése ID alapján
+# ============================================================
+@router.get("/{listing_id}", response_model=ListingResponse)
+def get_listing_by_id(
+    listing_id: int,
+    db: Session = Depends(get_db),
+):
+    """Publikus vagy preview lekérés egy adott hirdetéshez."""
+    listing = db.query(Listing).filter(Listing.id == listing_id).first()
+    if not listing:
+        raise HTTPException(status_code=404, detail="Hirdetés nem található.")
+
+    # biztonság kedvéért
+    if not isinstance(listing.tags, list):
+        listing.tags = []
+
+    return listing

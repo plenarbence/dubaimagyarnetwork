@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import ListingCard from "@dubaimagyarnetwork/shared/components/ListingCard"; // ✅ shared import
+import ListingCard from "@dubaimagyarnetwork/shared/components/ListingCard";
 
 export default function PendingUserListingsPage() {
   const [awaiting, setAwaiting] = useState([]);
@@ -55,16 +55,24 @@ export default function PendingUserListingsPage() {
       </div>
     );
 
-  // 🔹 Szekció renderelő
   const renderSection = (title, color, listings) => (
     <section className="mb-10">
       <h2 className={`text-xl font-semibold mb-4 ${color}`}>{title}</h2>
       {listings.length === 0 ? (
-        <p className="text-gray-600 text-center">Nincs ilyen státuszú hirdetésed.</p>
+        <p className="text-gray-600 text-center">
+          Nincs ilyen státuszú hirdetésed.
+        </p>
       ) : (
-        <div className="flex flex-wrap gap-5 justify-center">
+        <div
+          className="grid gap-5 justify-center"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }}
+        >
           {listings.map((l) => (
-            <ListingCard key={l.id} listing={l} linkTo={`/profile/preview/${l.id}`} />
+            <ListingCard
+              key={l.id}
+              listing={l}
+              linkTo={`/profile/preview/${l.id}`}
+            />
           ))}
         </div>
       )}
@@ -72,7 +80,7 @@ export default function PendingUserListingsPage() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-2xl font-semibold mb-8 text-center">
         Felhasználói beavatkozást igénylő hirdetések
       </h1>

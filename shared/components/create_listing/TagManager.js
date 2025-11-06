@@ -56,17 +56,18 @@ export default function TagManager({ tags, onChange }) {
 
       {tagError && <p className="text-sm text-red-600">{tagError}</p>}
 
-      <div className="flex flex-wrap gap-2 mt-2">
+      {/* 🔹 Tag lista szürke kis dobozokkal */}
+      <div className="flex flex-wrap gap-2 mt-3">
         {tags.map((t) => (
           <span
             key={t}
-            className="inline-flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm"
+            className="inline-flex items-center bg-gray-100 border border-gray-300 text-gray-800 rounded-full px-3 py-1 text-sm shadow-sm hover:bg-gray-200 transition"
           >
             {t}
             <button
               type="button"
               onClick={() => handleRemoveTag(t)}
-              className="ml-2 text-red-600 font-bold"
+              className="ml-2 text-gray-500 hover:text-red-600 font-bold"
               aria-label={`Tag törlése: ${t}`}
             >
               ×

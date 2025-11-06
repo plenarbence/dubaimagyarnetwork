@@ -84,7 +84,7 @@ export default function CreateListingPage() {
       }
 
       setStatus("✅ Vázlat sikeresen elmentve!");
-      setTimeout(() => router.push("/profile/pending_user"), 1000);
+      setTimeout(() => router.push(`/profile/edit/${data.id}`), 1000);
     } catch {
       setStatus("❌ Hálózati hiba. Próbáld újra később.");
     }
