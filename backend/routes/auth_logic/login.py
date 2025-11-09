@@ -2,9 +2,9 @@ from datetime import datetime
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from models.user import User
-from auth_logic.hashing import verify_password
-from auth_logic.jwt_handler import create_access_token
+from backend.models.user import User
+from backend.routes.auth_logic.hashing import verify_password
+from backend.routes.auth_logic.jwt_handler import create_access_token
 
 
 def login_user(form_data, db: Session):

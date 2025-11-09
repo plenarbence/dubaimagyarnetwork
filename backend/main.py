@@ -7,14 +7,15 @@ from fastapi.middleware.cors import CORSMiddleware
 # -----------------------------
 # ✅ Saját modulok importja
 # -----------------------------
-from config import CORS_ORIGINS
+from backend.config import CORS_ORIGINS
+from backend.routes import auth, admin
 
 
 # -----------------------------
 # ✅ Adatbázis inicializálás (csak fejlesztéshez)
 # -----------------------------
 # Alembic migráció bevezetése után ez a sor el fog tűnni!
-from database import Base, engine
+from backend.database import Base, engine
 
 Base.metadata.create_all(bind=engine)
 
@@ -45,7 +46,8 @@ app.add_middleware(
 # ---------------------------------------
 # ✅ ROUTE-k regisztrálása
 # ---------------------------------------
-
+app.include_router(auth.router)
+app.include_router(admin.router)
 
 
 
@@ -55,10 +57,4 @@ app.add_middleware(
 @app.get("/")
 def root():
     return {"message": "Dubai Magyar Network API működik 🚀"}
-
-
-
-
-
-
 

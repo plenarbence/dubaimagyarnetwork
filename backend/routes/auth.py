@@ -2,15 +2,15 @@ from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from database import get_db
-from schemas.user_schema import UserCreate, UserResponse
-from auth_logic.jwt_handler import verify_access_token
+from backend.database import get_db
+from backend.schemas.user_schema import UserCreate, UserResponse
+from backend.routes.auth_logic.jwt_handler import verify_access_token
 
 # 🔹 üzleti logikák (tiszta függvények)
-from auth_logic.register import register_user
-from auth_logic.login import login_user
-from auth_logic.get_current_user import get_current_user
-from auth_logic.verify_email import verify_email
+from backend.routes.auth_logic.register import register_user
+from backend.routes.auth_logic.login import login_user
+from backend.routes.auth_logic.get_current_user import get_current_user
+from backend.routes.auth_logic.verify_email import verify_email
 
 # -------------------------------
 # ✅ Router beállítása

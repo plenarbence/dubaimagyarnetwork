@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.user import User
-from schemas.user_schema import UserCreate, UserResponse
-from auth_logic.hashing import hash_password
-from auth_logic.validate_password import validate_password
+from backend.models.user import User
+from backend.schemas.user_schema import UserCreate, UserResponse
+from backend.routes.auth_logic.hashing import hash_password
+from backend.routes.auth_logic.validate_password import validate_password
 
 
 def register_user(user: UserCreate, db: Session) -> UserResponse:

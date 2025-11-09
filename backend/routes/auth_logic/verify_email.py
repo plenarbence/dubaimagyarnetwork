@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.user import User
+from backend.models.user import User
 
 
 def verify_email(current_email: str, db: Session):
