@@ -1,13 +1,12 @@
 # backend/database.py
-from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
 from backend.config import DATABASE_URL
 
 # -----------------------------
 # ✅ Engine
 # -----------------------------
-engine = create_engine(
+engine = create_async_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 )
@@ -15,7 +14,7 @@ engine = create_engine(
 # -----------------------------
 # ✅ Session & Base
 # -----------------------------
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
@@ -30,9 +29,6 @@ Base = declarative_base()
 # ================================
 # ✅ DB session kezelése
 # ================================
-def get_db():
-    db = SessionLocal()
-    try:
+async def get_db():
+    async with SessionLocal() as db:
         yield db
-    finally:
-        db.close()

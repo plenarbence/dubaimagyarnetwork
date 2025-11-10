@@ -1,15 +1,17 @@
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from backend.models.user import User
 
 
-def verify_email(current_email: str, db: Session):
+async def verify_email(current_email: str, db: AsyncSession):
     """
     Egyszerű (átmeneti) e-mail verifikáció:
     - token alapján azonosítja a usert
     - is_verified = True
     """
-    user = db.query(User).filter(User.email == current_email).first()
+    result = await db.execute(select(User).filter(User.email == current_email))
+    user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -17,7 +19,7 @@ def verify_email(current_email: str, db: Session):
         )
 
     user.is_verified = True
-    db.commit()
-    db.refresh(user)
+    await db.commit()
+    await db.refresh(user)
 
     return {"message": "Email verified successfully", "is_verified": user.is_verified}

@@ -1,0 +1,5 @@
+Generic single-database configuration.
+
+új mező, tábla, módosítás	alembic revision --autogenerate -m "msg"
+változás alkalmazása		alembic upgrade head
+visszagörgetés (rollback)	alembic downgrade -1

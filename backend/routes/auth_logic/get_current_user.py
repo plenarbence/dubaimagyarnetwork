@@ -1,13 +1,15 @@
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from backend.models.user import User
 
 
-def get_current_user(email: str, db: Session):
+async def get_current_user(email: str, db: AsyncSession):
     """
     Tokenből az emailt kinyeri, majd visszaadja a hozzá tartozó User objektumot.
     """
-    user = db.query(User).filter(User.email == email).first()
+    result = await db.execute(select(User).filter(User.email == email))
+    user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

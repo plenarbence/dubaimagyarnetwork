@@ -12,15 +12,6 @@ from backend.routes import auth, admin
 
 
 # -----------------------------
-# ✅ Adatbázis inicializálás (csak fejlesztéshez)
-# -----------------------------
-# Alembic migráció bevezetése után ez a sor el fog tűnni!
-from backend.database import Base, engine
-
-Base.metadata.create_all(bind=engine)
-
-
-# -----------------------------
 # ✅ FastAPI inicializálás
 # -----------------------------
 app = FastAPI(
@@ -57,4 +48,12 @@ app.include_router(admin.router)
 @app.get("/")
 def root():
     return {"message": "Dubai Magyar Network API működik 🚀"}
+
+
+
+
+
+
+
+
 

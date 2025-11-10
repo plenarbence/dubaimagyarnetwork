@@ -1,6 +1,2 @@
-main.py 
-- alembic (migration) integracio
-
-
 auth.py 
 - email verification
