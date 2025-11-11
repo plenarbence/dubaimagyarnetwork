@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # ✅ Saját modulok importja
 # -----------------------------
 from backend.config import CORS_ORIGINS
-from backend.routes import auth, admin, categories
+from backend.routes import auth, admin, categories, content
 
 
 # -----------------------------
@@ -40,6 +40,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(categories.router)
+app.include_router(content.router)
 
 
 
@@ -49,5 +50,11 @@ app.include_router(categories.router)
 @app.get("/")
 def root():
     return {"message": "Dubai Magyar Network API működik 🚀"}
+
+
+
+
+
+
 
 

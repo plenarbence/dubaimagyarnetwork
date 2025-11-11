@@ -6,7 +6,7 @@ from backend.models.category import Category
 
 async def update_category_name_logic(cat_id: int, new_name: str, db: AsyncSession) -> None:
     """
-    Kategória nevének módosítása.
+    Kategória nevének módosítása (duplikáció ellenőrzéssel).
     """
 
     # --- 1️⃣ Lekérjük a kategóriát ---
@@ -19,7 +19,7 @@ async def update_category_name_logic(cat_id: int, new_name: str, db: AsyncSessio
             detail="Category not found."
         )
 
-    # --- 2️⃣ Validálás ---
+    # --- 2️⃣ Új név validálása ---
     new_name = new_name.strip()
     if not new_name:
         raise HTTPException(
@@ -27,7 +27,17 @@ async def update_category_name_logic(cat_id: int, new_name: str, db: AsyncSessio
             detail="Category name cannot be empty."
         )
 
-    # --- 3️⃣ Név frissítése ---
+    # --- 3️⃣ Duplikáció ellenőrzése (kivéve saját magát) ---
+    dup_check = await db.execute(
+        select(Category).where(Category.name == new_name, Category.id != cat_id)
+    )
+    if dup_check.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Ez a kategórianév már létezik."
+        )
+
+    # --- 4️⃣ Név frissítése ---
     category.name = new_name
     await db.commit()
     await db.refresh(category)

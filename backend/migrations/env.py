@@ -6,7 +6,7 @@ from alembic import context
 # 🔹 Saját modulok
 from backend.database import Base, engine
 from backend.config import DATABASE_URL
-from backend.models import user, category    # ez kell hogy lassa a modelleket
+from backend.models import user, category, content    # ez kell hogy lassa a modelleket
 
 config = context.config
 

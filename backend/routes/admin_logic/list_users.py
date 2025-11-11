@@ -5,4 +5,10 @@ from backend.models.user import User
 
 async def list_users_logic(db: AsyncSession):
     result = await db.execute(select(User).order_by(User.created_at.desc()))
-    return result.scalars().all()
+
+    users = result.scalars().all()
+    for user in users:
+        db.expunge(user)
+    return users
+
+
