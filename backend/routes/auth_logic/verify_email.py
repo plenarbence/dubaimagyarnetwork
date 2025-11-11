@@ -21,5 +21,6 @@ async def verify_email(current_email: str, db: AsyncSession):
     user.is_verified = True
     await db.commit()
     await db.refresh(user)
+    db.expunge(user)
 
     return {"message": "Email verified successfully", "is_verified": user.is_verified}

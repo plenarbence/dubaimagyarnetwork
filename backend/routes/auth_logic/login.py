@@ -29,6 +29,7 @@ async def login_user(form_data, db: AsyncSession):
     user.last_login = datetime.utcnow()
     await db.commit()
     await db.refresh(user)
+    db.expunge(user)
 
     # JWT token generálása
     access_token = create_access_token(data={"sub": user.email})

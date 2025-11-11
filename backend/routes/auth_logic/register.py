@@ -35,5 +35,6 @@ async def register_user(user: UserCreate, db: AsyncSession) -> UserResponse:
     db.add(new_user)
     await db.commit()
     await db.refresh(new_user)
+    db.expunge(new_user)
 
-    return new_user
+    return UserResponse.model_validate(new_user)
