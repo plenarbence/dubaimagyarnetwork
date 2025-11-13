@@ -43,6 +43,16 @@ async def get_me(email: str = Depends(verify_access_token), db: AsyncSession = D
 
 
 # ================================
+# ✅ Token validacio (nem keri le a felhasznalot csak csekkolja hogy a token valid e)
+# ================================
+@router.get("/verify")
+def verify_token(email: str = Depends(verify_access_token)):
+    return {"valid": True}
+
+
+
+
+# ================================
 # ✅ EMAIL VERIFIKÁCIÓ (átmeneti)
 # ================================
 @router.post("/verify-email")
