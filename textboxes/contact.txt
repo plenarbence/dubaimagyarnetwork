@@ -1,0 +1,7 @@
+{
+  "title": "Kapcsolat",
+  "description": "Ha kérdésed van a hirdetésekkel vagy az oldallal kapcsolatban, keress minket bátran e-mailben, telefonon vagy WhatsAppon.",
+  "email": "info@dubaimagyarnetwork.com",
+  "phone": "+971551301055",
+  "whatsapp": "971551301055"
+}
