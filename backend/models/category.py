@@ -25,18 +25,17 @@ class Category(Base):
     children = relationship(
         "Category",
         back_populates="parent",
-        cascade="all, delete-orphan",
+        cascade="all", 
         passive_deletes=True,
         order_by="Category.order_index"
     )
-    """
+
+    
     listings = relationship(
         "Listing",
         back_populates="category",
-        cascade="all, delete",
-        passive_deletes=True,
     )
-    """
+    
     
     def __repr__(self):
         return f"<Category(id={self.id}, name='{self.name}', parent_id={self.parent_id})>"

@@ -1,8 +1,8 @@
-"""add categories table
+"""add images and ratings tables
 
-Revision ID: 89816412a3e6
-Revises: 81f4bdc1512c
-Create Date: 2025-11-10 23:15:51.128663
+Revision ID: b24811c956ef
+Revises: 910faf8d8f59
+Create Date: 2025-11-24 12:29:27.713520
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '89816412a3e6'
-down_revision: Union[str, Sequence[str], None] = '81f4bdc1512c'
+revision: str = 'b24811c956ef'
+down_revision: Union[str, Sequence[str], None] = '910faf8d8f59'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

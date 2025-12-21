@@ -45,12 +45,12 @@ ADMIN_PASS = os.getenv("ADMIN_PASS")
 # -----------------------------
 # Storage / CDN
 # -----------------------------
-STORAGE_BACKEND = os.getenv("STORAGE_BACKEND")  # local | cdn
-UPLOAD_DIR = os.getenv("UPLOAD_DIR")
-
-CDN_UPLOAD_URL = os.getenv("CDN_UPLOAD_URL")
-CDN_DELIVERY_BASE = os.getenv("CDN_DELIVERY_BASE")
-CDN_API_KEY = os.getenv("CDN_API_KEY")
+R2_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+R2_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+R2_ENDPOINT = os.getenv("R2_ENDPOINT")
+R2_BUCKET = os.getenv("R2_BUCKET")
+R2_PUBLIC_BASE = os.getenv("R2_PUBLIC_BASE")
+IMAGE_PREFIX = os.getenv("IMAGE_PREFIX")
 
 
 
@@ -66,11 +66,12 @@ _required_vars = {
     "CORS_ORIGINS": CORS_ORIGINS,
     "ADMIN_USER": ADMIN_USER,
     "ADMIN_PASS": ADMIN_PASS,
-    "STORAGE_BACKEND": STORAGE_BACKEND,
-    "UPLOAD_DIR": UPLOAD_DIR,
-    "CDN_UPLOAD_URL": CDN_UPLOAD_URL,
-    "CDN_DELIVERY_BASE": CDN_DELIVERY_BASE,
-    "CDN_API_KEY": CDN_API_KEY,
+    "R2_ACCESS_KEY_ID" : R2_ACCESS_KEY_ID,
+    "R2_SECRET_ACCESS_KEY" : R2_SECRET_ACCESS_KEY,
+    "R2_ENDPOINT" : R2_ENDPOINT,
+    "R2_BUCKET" : R2_BUCKET,
+    "R2_PUBLIC_BASE" : R2_PUBLIC_BASE,
+    "IMAGE_PREFIX" : IMAGE_PREFIX,
 }
 
 _missing = [name for name, val in _required_vars.items() if val in (None, "", [])]

@@ -8,6 +8,7 @@ from sqlalchemy import (
     ForeignKey,
     Enum,
     JSON,
+    Boolean,
 )
 from sqlalchemy.orm import relationship
 from backend.database import Base
@@ -37,7 +38,7 @@ class Listing(Base):
     # ---------------------------------------
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(70), nullable=False)           # max. 70 karakter
-    description = Column(Text, nullable=False)            # HTML formátum
+    description = Column(Text, nullable=False)            
     status = Column(Enum(ListingStatus), default=ListingStatus.draft, nullable=False)
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -53,7 +54,9 @@ class Listing(Base):
 
     user = relationship("User", back_populates="listings")
     category = relationship("Category", back_populates="listings")
-    #images = relationship("Image", back_populates="listing", cascade="all, delete-orphan")
+    images = relationship("Image", back_populates="listing", cascade="all, delete-orphan")
+    ratings = relationship("Rating", back_populates="listing", cascade="all, delete-orphan")
+
 
     # ---------------------------------------
     # 🏢 Üzleti és elérhetőségi adatok
@@ -74,26 +77,28 @@ class Listing(Base):
     # 🧠 Admin információk
     # ---------------------------------------
     admin_comment = Column(String(500), nullable=True)
+    admin_featured = Column(Boolean, default=False, nullable=False)
+
 
     # ---------------------------------------
     # 💰 Kiemelt (sponsored) adatok
     # ---------------------------------------
-    sponsored_from = Column(DateTime, nullable=True)
-    sponsored_until = Column(DateTime, nullable=True)
+    featured_from = Column(DateTime, nullable=True)
+    featured_until = Column(DateTime, nullable=True)
 
     # helper property (nem oszlop!)
     @property
-    def is_sponsored(self) -> bool:
-        """Igaz, ha az aktuális dátum a sponsored időszakon belül van."""
-        if self.sponsored_from and self.sponsored_until:
-            return self.sponsored_from <= datetime.utcnow() <= self.sponsored_until
+    def is_featured(self) -> bool:
+        """Igaz, ha az aktuális dátum a featured időszakon belül van."""
+        if self.featured_from and self.featured_until:
+            return self.featured_from <= datetime.utcnow() <= self.featured_until
         return False
 
     # ---------------------------------------
     # 📊 Gombnyomás alapú counterek (clicks)
     # ---------------------------------------
     click_counter = Column(Integer, default=0)                # hirdetésre kattintások
-    click_counter_sponsored = Column(Integer, default=0)      # sponsored megjelenésből érkező kattintások
+    click_counter_featured = Column(Integer, default=0)      # featured megjelenésből érkező kattintások
 
     click_website = Column(Integer, default=0)
     click_email = Column(Integer, default=0)
