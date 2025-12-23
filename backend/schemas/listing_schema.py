@@ -164,10 +164,9 @@ class MyListingResponse(BaseModel):
     rating_count: int = 0
 
     # -----------------------------
-    # Main image azonosító
-    # (Image.id, ahol is_main = true)
+    # Main image url
     # -----------------------------
-    main_image_id: Optional[int] = None
+    main_image_url: Optional[str] = None
 
     class Config:
         from_attributes = True

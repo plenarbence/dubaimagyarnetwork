@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
 
 import { useAuthUser } from "../../../../profile_logic/useAuthUser";
 import { useState } from "react";
@@ -11,6 +12,13 @@ import TagManager from "../../../listings_logic/TagManager";
 import ContactFieldsManager from "../../../listings_logic/ContactFieldsManager";
 import DescriptionInput from "../../../listings_logic/DescriptionInput";
 import CategorySelector from "../../../listings_logic/CategorySelector";
+
+type ListingImage = {
+  id: number;
+  url: string;
+  is_main: boolean;
+};
+
 
 export default function EditListingPage() {
   const router = useRouter();
@@ -42,6 +50,11 @@ export default function EditListingPage() {
     parentId: "",
     childId: "",
   });
+  const [images, setImages] = useState<ListingImage[]>([]);
+  const [imageLoadError, setImageLoadError] = useState(false);
+
+
+
 
 
   // -----------------------------
@@ -107,7 +120,31 @@ export default function EditListingPage() {
       } catch (err) {
         console.error("Edit preload error:", err);
         alert("Hálózati hiba a betöltéskor.");
+        return;
       }
+
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const res = await fetch(`${API_URL}/images/listing/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setImageLoadError(true);
+          return;
+        }
+
+        setImages(data);
+        setImageLoadError(false);
+      } catch (err) {
+        console.error("Image preload error:", err);
+        setImageLoadError(true);
+      }
+
     }
 
     fetchListing();
@@ -266,6 +303,214 @@ export default function EditListingPage() {
 
         {/* ---- CATEGORY ---- */}
         <CategorySelector value={category} onChange={setCategory} />
+
+
+
+        {/* ---- KÉPEK LISTÁJA ---- */}
+        <div className="mt-4">
+          <h2 className="text-lg font-semibold mb-2">Feltöltött képek</h2>
+
+          {imageLoadError ? (
+            <p className="text-sm text-red-500 italic">
+              A képek betöltése nem sikerült.
+            </p>
+          ) : images.length === 0 ? (
+            <p className="text-sm text-gray-500 italic">
+              Még nincs feltöltött kép ehhez a hirdetéshez.
+            </p>
+          ) : (
+            <div className="grid grid-cols-5 gap-3">
+              {images.map((img) => (
+                <div
+                  key={img.id}
+                  className="relative border rounded overflow-hidden"
+                >
+                  <Image
+                    src={img.url}
+                    alt="listing image"
+                    width={300}
+                    height={400}
+                    className="w-full aspect-3/4 object-cover rounded"
+                  />
+
+                  {img.is_main && (
+                    <span className="absolute top-1 left-1 bg-green-600 text-white text-xs px-2 py-0.5 rounded">
+                      Borítókép
+                    </span>
+                  )}
+
+                  {/* 🟩 borítókép kiválasztó gomb (ha nem ez a fő kép) */}
+                  {!img.is_main && (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const token = localStorage.getItem("token");
+                          if (!token) return;
+
+                          const res = await fetch(
+                            `${API_URL}/images/${img.id}/set_main`,
+                            {
+                              method: "POST",
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+
+                          if (!res.ok) {
+                            console.error(
+                              "Borítókép beállítási hiba:",
+                              await res.text()
+                            );
+                            return;
+                          }
+
+                          // 🔄 új képek lekérése (helyes endpoint)
+                          const imgRes = await fetch(
+                            `${API_URL}/images/listing/${id}`,
+                            {
+                              headers: { Authorization: `Bearer ${token}` },
+                            }
+                          );
+
+                          if (imgRes.ok) {
+                            const imgs = await imgRes.json();
+                            setImages(imgs);
+                          }
+                        } catch (err) {
+                          console.error(
+                            "Hálózati hiba borítókép beállításakor:",
+                            err
+                          );
+                        }
+                      }}
+                      className="absolute top-1 left-1 w-4 h-4 border border-black shadow-sm rounded-sm bg-white/80 hover:bg-green-500 hover:border-green-600 transition"
+                      title="Beállítás borítóképként"
+                    ></button>
+                  )}
+
+
+                  {/* 🔴 törlés gomb */}
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!confirm("Biztosan törlöd ezt a képet?")) return;
+
+                      try {
+                        const token = localStorage.getItem("token");
+                        if (!token) return;
+
+                        const res = await fetch(`${API_URL}/images/${img.id}`, {
+                          method: "DELETE",
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        });
+
+                        if (!res.ok) {
+                          console.error("Törlési hiba:", await res.text());
+                          return;
+                        }
+
+                        // 🔄 képek újralekérése (HELYES endpoint)
+                        const imgRes = await fetch(`${API_URL}/images/listing/${id}`, {
+                          headers: { Authorization: `Bearer ${token}` },
+                        });
+
+                        if (imgRes.ok) {
+                          const imgs = await imgRes.json();
+                          setImages(imgs);
+                        }
+                      } catch (err) {
+                        console.error("Hálózati hiba törlés közben:", err);
+                      }
+                    }}
+                    className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-80 hover:opacity-100"
+                    title="Kép törlése"
+                  >
+                    ×
+                  </button>
+
+
+
+
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+
+
+        {/* ---- KÉPFELTÖLTÉS ---- */}
+        <div className="mt-6 border-t pt-4">
+          <h2 className="text-lg font-semibold mb-2">Új képek feltöltése</h2>
+
+          <label
+            htmlFor="file-upload"
+            className="inline-block bg-gray-800 text-white text-sm px-4 py-2 rounded cursor-pointer hover:opacity-90 transition"
+          >
+            Képek kiválasztása
+          </label>
+
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            accept="image/*"
+            className="hidden"
+            onChange={async (e) => {
+              const files = e.target.files;
+              if (!files || !files.length) return;
+
+              const token = localStorage.getItem("token");
+              if (!token) {
+                alert("Be kell jelentkezned a képfeltöltéshez.");
+                return;
+              }
+
+              for (const file of files) {
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("listing_id", String(id));
+
+                try {
+                  const res = await fetch(`${API_URL}/images/`, {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                    body: formData,
+                  });
+
+                  const data = await res.json();
+
+                  if (!res.ok) {
+                    alert(data?.detail || "Képfeltöltési hiba.");
+                    break;
+                  }
+
+                  // ✅ új kép hozzáadása state-hez
+                  setImages((prev) => [...prev, data]);
+
+                } catch (err) {
+                  console.error("Image upload error:", err);
+                  alert("Hálózati hiba a képfeltöltésnél.");
+                  break;
+                }
+              }
+
+              e.target.value = ""; // input reset
+            }}
+          />
+        </div>
+
+
+
+
+
+
 
 
         <p className="text-sm text-gray-600 italic mt-1">

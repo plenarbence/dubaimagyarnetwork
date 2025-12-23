@@ -10,6 +10,7 @@ from backend.schemas.image_schema import ImageResponse
 from backend.routes.image_logic.upload_image_logic import upload_image_logic
 from backend.routes.image_logic.delete_image_logic import delete_image_logic
 from backend.routes.image_logic.get_images_by_listing_logic import get_images_by_listing_logic
+from backend.routes.image_logic.set_main_image_logic import set_main_image_logic
 
 
 
@@ -45,3 +46,12 @@ async def delete_image(image_id: int, db: AsyncSession = Depends(get_db), curren
 @router.get("/listing/{listing_id}", response_model=List[ImageResponse])
 async def get_listing_images(listing_id: int, db: AsyncSession = Depends(get_db), current_user=Depends(get_me)):
     return await get_images_by_listing_logic(db=db, listing_id=listing_id, user_id=current_user.id)
+
+
+
+# -------------------------------------------------------
+# ⭐ FŐ KÉP BEÁLLÍTÁSA
+# -------------------------------------------------------
+@router.post("/{image_id}/set_main")
+async def set_main_image(image_id: int, db: AsyncSession = Depends(get_db), current_user = Depends(get_me)):
+    return await set_main_image_logic(db=db, image_id=image_id, user_id=current_user.id)

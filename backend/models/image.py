@@ -20,8 +20,8 @@ class Image(Base):
     # pl: photos/user123/abc123.webp
     cdn_key = Column(String, nullable=False)
 
-    # 🔥 opcionális teljes URL (ha akarod hogy a backend tárolja)
-    url = Column(String, nullable=True)
+    # 🔥 teljes URL 
+    url = Column(String, nullable=False)
 
     filename = Column(String, nullable=False)
 
