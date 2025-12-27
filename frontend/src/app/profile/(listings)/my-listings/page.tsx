@@ -58,7 +58,18 @@ export default function MyListingsPage() {
     <div className="p-6 space-y-10 max-w-7xl mx-auto">
       <h1 className="text-2xl font-semibold">Hirdetéseim</h1>
 
-      {STATUS_GROUPS.map((group) => {
+      {listings.length === 0 && (
+        <div className="mt-16 text-center text-gray-500">
+          <p className="text-lg font-medium text-gray-700">
+            Még nincs hirdetésed
+          </p>
+          <p className="mt-2 text-sm">
+            Hozz létre egy hirdetést, hogy megjelenj a platformon.
+          </p>
+        </div>
+      )}
+
+      {listings.length > 0 && STATUS_GROUPS.map((group) => {
         const groupListings = listings.filter(
           (l) => l.status === group.key
         );

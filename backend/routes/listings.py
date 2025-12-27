@@ -2,14 +2,14 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database import get_db
-from backend.schemas.listing_schema import ListingCreate, ListingCreateResponse, ListingResponse, MyListingResponse
+from backend.schemas.listing_schema import ListingCreate, ListingCreateResponse, ListingResponse, MyListingResponse, ListingPreviewResponse
 from backend.routes.listings_logic.create_listing import create_listing_logic
 from backend.routes.auth import get_me 
 from backend.routes.listings_logic.get_listing_by_id_logic import get_listing_by_id_logic
 from backend.routes.listings_logic.update_listing_logic import update_listing_logic
 from backend.routes.listings_logic.submit_listing_logic import submit_listing_logic
 from backend.routes.listings_logic.get_my_listings import get_my_listings_logic
-
+from backend.routes.listings_logic.get_listing_preview_logic import get_listing_preview_logic
 
 
 
@@ -51,4 +51,9 @@ async def submit_listing(listing_id: int, data: ListingCreate, db: AsyncSession 
     return await submit_listing_logic(db=db, listing_id=listing_id, user_id=current_user.id, data=data)
 
 
+
+# user: get single listing preview
+@router.get("/{listing_id}/preview", response_model=ListingPreviewResponse)
+async def get_listing_preview(listing_id: int, db: AsyncSession = Depends(get_db), current_user=Depends(get_me)):
+    return await get_listing_preview_logic(db=db, listing_id=listing_id, user_id=current_user.id)
 

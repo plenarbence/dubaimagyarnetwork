@@ -67,7 +67,7 @@ const rating = Math.round(((listing.rating_avg ?? 0) * 2)) / 2;
         {/* -----------------------------
             JOBB OLDAL – TARTALOM
         ----------------------------- */}
-        <div className="flex flex-col flex-1 py-4 px-1 min-w-0">
+        <div className="flex flex-col flex-1 py-3 px-1 min-w-0">
           {/* CÍM */}
           <h3 className="font-semibold text-sm leading-snug line-clamp-3 text-black">
             {listing.title}

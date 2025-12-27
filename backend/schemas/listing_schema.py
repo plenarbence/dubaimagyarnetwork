@@ -170,3 +170,43 @@ class MyListingResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+
+
+
+# ===========================
+# ✅ Output schema – preview
+# ===========================
+class ListingPreviewResponse(BaseModel):
+    # ---- alap ----
+    title: str
+    description: str
+    status: ListingStatus
+
+    # ---- üzleti / kontakt ----
+    company: Optional[str] = None
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
+    website: Optional[str] = None
+    whatsapp: Optional[str] = None
+    instagram: Optional[str] = None
+    tiktok: Optional[str] = None
+    facebook: Optional[str] = None
+    youtube: Optional[str] = None
+    location: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+    # ---- rating (aggregált) ----
+    rating_avg: Optional[float] = None
+    rating_count: int = 0
+
+    # ---- képek ----
+    image_url_list: List[str] = []
+
+    # ---- admin visszajelzés ----
+    admin_comment: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
