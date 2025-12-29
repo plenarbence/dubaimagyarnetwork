@@ -6,7 +6,7 @@ from backend.database import get_db
 from backend.routes.admin_logic.verify_admin import verify_admin_token
 
 # --- sémák és modellek ---
-from backend.schemas.category_schema import CategoryCreate, CategoryOut
+from backend.schemas.category_schema import CategoryCreate, CategoryOut, CategoryRename
 
 # --- logikai modulok ---
 from backend.routes.categories_logic.create_category import create_category_logic
@@ -80,14 +80,11 @@ async def update_category_order_endpoint(
 # ============================================================
 # ✅ 5️⃣ PUT – kategória nevének módosítása (admin)
 # ============================================================
-@router.put("/{cat_id}/name/{new_name}", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/{cat_id}/name", status_code=status.HTTP_204_NO_CONTENT)
 async def update_category_name_endpoint(
     cat_id: int,
-    new_name: str,
+    data: CategoryRename,
     db: AsyncSession = Depends(get_db),
     _: dict = Depends(verify_admin_token),
 ):
-    """
-    Kategória nevének módosítása (csak admin).
-    """
-    await update_category_name_logic(cat_id, new_name, db)
+    await update_category_name_logic(cat_id, data.name, db)

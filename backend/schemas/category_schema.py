@@ -22,8 +22,13 @@ class CategoryOut(BaseModel):
     name: str
     parent_id: Optional[int]
     order_index: int
+    listing_count: int
 
     class Config:
         from_attributes = True
+
+# scheme rename-hez
+class CategoryRename(BaseModel):
+    name: str = Field(..., min_length=1)
 
 

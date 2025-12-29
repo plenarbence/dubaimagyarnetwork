@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.schemas.admin_schema import AdminLoginRequest
@@ -28,6 +28,20 @@ def admin_login(request: Request, credentials: AdminLoginRequest):
     """
     check_rate_limit(request)
     return admin_login_logic(credentials.username, credentials.password)
+
+
+
+# ================================
+# ✅ Admin token verify
+# ================================
+@router.get("/verify", status_code=status.HTTP_200_OK)
+def verify_admin_route(_: dict = Depends(verify_admin_token)):
+    """
+    Ellenőrzi, hogy az admin token érvényes-e.
+    Ha igen → 200 OK
+    Ha nem → 401 / 403 (verify_admin_token dobja)
+    """
+    return {"status": "ok"}
 
 
 # ================================

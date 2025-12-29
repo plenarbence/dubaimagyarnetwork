@@ -51,4 +51,11 @@ async def create_category_logic(data: CategoryCreate, db: AsyncSession) -> Categ
     await db.refresh(new_cat)
     db.expunge(new_cat)
 
-    return CategoryOut.model_validate(new_cat)
+    return CategoryOut(
+        id=new_cat.id,
+        name=new_cat.name,
+        parent_id=new_cat.parent_id,
+        order_index=new_cat.order_index,
+        listing_count=0,
+    )
+
