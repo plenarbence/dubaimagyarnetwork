@@ -7,9 +7,9 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Enum,
-    JSON,
     Boolean,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from backend.database import Base
 import enum
@@ -71,7 +71,7 @@ class Listing(Base):
     facebook = Column(String(255), nullable=True)
     youtube = Column(String(255), nullable=True)
     location = Column(String(255), nullable=True)
-    tags = Column(JSON, nullable=True)  # opcionális kulcsszavak listája
+    tags = Column(JSONB, nullable=True)  # opcionális kulcsszavak listája
 
     # ---------------------------------------
     # 🧠 Admin információk
