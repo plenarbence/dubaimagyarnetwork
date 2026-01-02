@@ -20,11 +20,6 @@ def _csv(name: str, default: str = "") -> list[str]:
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # -----------------------------
-# API base
-# -----------------------------
-API_BASE_URL = os.getenv("API_BASE_URL")
-
-# -----------------------------
 # JWT
 # -----------------------------
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -59,7 +54,6 @@ IMAGE_PREFIX = os.getenv("IMAGE_PREFIX")
 # ---------- REQUIRED ENV CHECK ----------
 _required_vars = {
     "DATABASE_URL": DATABASE_URL,
-    "API_BASE_URL": API_BASE_URL,
     "JWT_SECRET": JWT_SECRET,
     "JWT_ALGORITHM": JWT_ALGORITHM,
     "ACCESS_TOKEN_EXPIRE_MINUTES": ACCESS_TOKEN_EXPIRE_MINUTES,
