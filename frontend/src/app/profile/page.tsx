@@ -34,13 +34,12 @@ export default function ProfilePage() {
 
       {!user.is_verified && (
         // 👉 EZ A NEM VERIFIED BOX COMPONENT
-        //<UnverifiedBox user={user} />
-        <VerifiedBoxes user={user} />
+        <UnverifiedBox user={user} />
       )}
 
-      {user.is_verified && (null
+      {user.is_verified && (
         // 👉 EZ A VERIFIED SETUP 
-        //<VerifiedBoxes user={user} />
+        <VerifiedBoxes user={user} />
       )}
 
     </div>

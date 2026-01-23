@@ -6,7 +6,7 @@ from sqlalchemy import engine_from_config, pool
 # 🔹 Saját modulok
 from backend.database import Base
 from backend.config import DATABASE_URL
-from backend.models import user, category, content, listing, image, rating    # ez kell hogy lassa a modelleket
+from backend.models import user, category, content, listing, image, rating, poster, suggestion, profanity, auth_code  # ez kell hogy lassa a modelleket
 
 
 def get_sync_database_url():

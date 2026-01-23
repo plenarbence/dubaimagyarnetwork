@@ -1,7 +1,129 @@
-export default function Home() {
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import RatingStars from "./../RatingStars";
+
+
+
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+type MyRating = {
+  rating_id: number;
+  text: string | null;
+  rating: number;
+  created_at: string;
+  listing_id: number;
+  listing_title: string;
+  listing_isactive: boolean;
+};
+
+export default function AboutMeRatingsPage() {
+  const [ratings, setRatings] = useState<MyRating[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          router.replace("/login");
+          return;
+        }
+
+        const res = await fetch(`${API_URL}/ratings/about-me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Nem sikerült lehívni az értékeléseket.");
+        }
+
+        const data = await res.json();
+        setRatings(data);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Ismeretlen hiba történt.");
+        }
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRatings();
+  }, [router]);
+
+
+
+
+  if (loading) {
+    return <div className="p-6">Betöltés…</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-600">{error}</div>;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white text-black">
-      <p>Ez egy üres page.</p>
+    <div className="p-6 max-w-3xl mx-auto space-y-4">
+      <h1 className="text-2xl font-semibold">Hirdetéseimről írt értékelések</h1>
+
+      {ratings.length === 0 && (
+        <div className="text-gray-500">Még nincs értékelésed.</div>
+      )}
+
+      {ratings.map((r) => (
+        <div
+          key={r.rating_id}
+          className="relative border rounded p-4 space-y-1"
+        >
+
+        {r.listing_isactive ? (
+        <Link
+            href={`/services/service/${r.listing_id}`}
+            className="font-medium hover:underline cursor-pointer"
+        >
+            {r.listing_title}
+        </Link>
+        ) : (
+        <span className="font-medium text-gray-400 cursor-not-allowed">
+            {r.listing_title}
+        </span>
+        )}
+
+
+
+          <RatingStars rating={r.rating} />
+
+        <div className="text-xs text-gray-500">
+          {new Date(r.created_at)
+            .toISOString()
+            .slice(0, 10)
+            .replaceAll("-", ".")}
+        </div>
+
+
+          {r.text && (
+            <div className="text-sm">
+              {r.text}
+            </div>
+          )}
+
+
+        </div>
+      ))}
     </div>
   );
 }

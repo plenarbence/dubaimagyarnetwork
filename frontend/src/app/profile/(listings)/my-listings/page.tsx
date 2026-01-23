@@ -18,10 +18,10 @@ type MyListing = {
 const STATUS_GROUPS = [
   { key: "awaiting_payment", title: "Fizetésre vár" },
   { key: "pending_admin", title: "Admin jóváhagyásra vár" },
-  { key: "rejected_admin", title: "Admin által visszadobva" },
+  { key: "rejected", title: "Admin által visszadobva" },
   { key: "draft", title: "Vázlatok" },
   { key: "active", title: "Aktív hirdetések" },
-  { key: "expired", title: "Lejárt hirdetések" },
+  { key: "expired", title: "Törölt hirdetések" },
 ];
 
 export default function MyListingsPage() {
@@ -55,7 +55,7 @@ export default function MyListingsPage() {
   }
 
   return (
-    <div className="p-6 space-y-10 max-w-7xl mx-auto">
+    <div className="p-6 space-y-10 max-w-6xl mx-auto">
       <h1 className="text-2xl font-semibold">Hirdetéseim</h1>
 
       {listings.length === 0 && (
@@ -88,7 +88,7 @@ export default function MyListingsPage() {
               max-w-5xl
               mx-auto
               grid-cols-[repeat(auto-fit,20rem)]
-              justify-center
+              
             ">
               {groupListings.map((listing) => (
                 <MyListingCard key={listing.id} listing={listing} />

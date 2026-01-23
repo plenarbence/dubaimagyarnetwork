@@ -44,9 +44,12 @@ async def create_category_logic(data: CategoryCreate, db: AsyncSession) -> Categ
         name=data.name.strip(),
         parent_id=data.parent_id,
         order_index=data.order_index or 0,
+        slug="__temp__",   # <- ideiglenes, csak hogy átmenjen az INSERT
     )
 
     db.add(new_cat)
+    await db.flush()              # <-- itt már van new_cat.id
+    new_cat.slug = str(new_cat.id)
     await db.commit()
     await db.refresh(new_cat)
     db.expunge(new_cat)

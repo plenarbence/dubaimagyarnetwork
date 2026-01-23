@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # -----------------------------
 from backend.config import CORS_ORIGINS
 from backend import models  # models __init__.py ba be kell importolni minden modelt hogy a relationshipek jol fussanak
-from backend.routes import auth, admin, categories, content, listings, images
+from backend.routes import auth, admin, categories, content, listings, images, poster, ratings, suggestions, auth_codes
 
 
 # -----------------------------
@@ -44,6 +44,10 @@ app.include_router(categories.router)
 app.include_router(content.router)
 app.include_router(listings.router)
 app.include_router(images.router)
+app.include_router(poster.router)
+app.include_router(ratings.router)
+app.include_router(suggestions.router)
+app.include_router(auth_codes.router)
 
 
 
@@ -53,8 +57,6 @@ app.include_router(images.router)
 @app.get("/")
 def root():
     return {"message": "Dubai Magyar Network API működik 🚀"}
-
-
 
 
 

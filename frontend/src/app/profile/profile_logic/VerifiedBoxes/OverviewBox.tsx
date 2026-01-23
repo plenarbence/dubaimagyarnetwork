@@ -42,12 +42,14 @@ export default function OverviewBox({ user }: { user: UserResponse }) {
       </div>
 
       {/* Fiók törlése - jobb alsó sarok */}
+      {/*
       <button
         onClick={() => router.push("/profile/delete-profile")}
         className="absolute bottom-3 right-3 text-sm text-black underline"
       >
         Fiók törlése
       </button>
+      */}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
 # ===========================
@@ -22,3 +22,12 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ===========================
+# ✅ Input schema – jelszó megváltoztatása
+# ===========================
+class ChangePasswordIn(BaseModel):
+    old_password: str = Field(..., min_length=8, max_length=128)
+    new_password: str = Field(..., min_length=8, max_length=128)
+    new_password_confirm: str = Field(..., min_length=8, max_length=128)

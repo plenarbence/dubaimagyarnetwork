@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import ServicesMenu from "./ServicesMenu";
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,8 +64,8 @@ export default function Navbar() {
       {/* Bal oldal – linkek (csak desktopon) */}
       <div className="hidden md:flex gap-6 flex-1">
         <Link href="/">Főoldal</Link>
-        <Link href="/listings">Szolgáltatások</Link>
-        <Link href="/providers">Hirdetőknek</Link>
+        <ServicesMenu onSelect={() => setIsOpen(false)} />
+        <Link href="/faq">GY.I.K.</Link>
         <Link href="/contact">Kapcsolat</Link>
       </div>
 
@@ -75,6 +77,7 @@ export default function Navbar() {
           height={60}
           width={60}
           priority
+          unoptimized
         />
       </div>
 
@@ -113,19 +116,15 @@ export default function Navbar() {
           >
             Főoldal
           </Link>
+          
+          <ServicesMenu onSelect={() => setIsOpen(false)} />
+
           <Link
-            href="/listings"
+            href="/faq"
             className="py-2 hover:bg-zinc-600"
             onClick={() => setIsOpen(false)}
           >
-            Szolgáltatások
-          </Link>
-          <Link
-            href="/providers"
-            className="py-2 hover:bg-zinc-600"
-            onClick={() => setIsOpen(false)}
-          >
-            Hirdetőknek
+            GY.I.K.
           </Link>
           <Link
             href="/contact"

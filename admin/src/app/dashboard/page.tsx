@@ -11,10 +11,16 @@ export default function DashboardPage() {
         </h2>
 
         <ul className="space-y-2 text-zinc-300">
-          <li>
-            <Link href="/dashboard/textboxes" className="hover:text-white">
-              Textboxes
+
+
+          <li className="hover:text-white cursor-pointer">
+            <Link href="/dashboard/listings" className="hover:text-white">
+              Listings
             </Link>
+          </li>
+
+          <li className="hover:text-white cursor-pointer">
+            Users
           </li>
 
           <li>
@@ -23,13 +29,29 @@ export default function DashboardPage() {
             </Link>
           </li>
 
-          <li className="hover:text-white cursor-pointer">
-            <Link href="/dashboard/listings" className="hover:text-white">
-              Listings
+          <li>
+            <Link href="/dashboard/categoriesSEO" className="hover:text-white">
+              Categories SEO
+            </Link>
+          </li> 
+          
+          <li>
+            <Link href="/dashboard/featured" className="hover:text-white">
+              Featured listings
             </Link>
           </li>
-          <li className="hover:text-white cursor-pointer">
-            Users
+
+
+          <li>
+            <Link href="/dashboard/posters" className="hover:text-white">
+              Posters
+            </Link>
+          </li>
+
+          <li>
+            <Link href="/dashboard/textboxes" className="hover:text-white">
+              Textboxes
+            </Link>
           </li>
 
         </ul>

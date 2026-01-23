@@ -526,7 +526,7 @@ export default function EditListingPage() {
             onClick={() => router.push("/profile/my-listings")}
             className="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
           >
-            Változtatások elvetése
+            Elvetés
           </button>
 
           <button
@@ -544,7 +544,7 @@ export default function EditListingPage() {
             onClick={handleSubmitForReview}
             className="w-full px-4 py-2 rounded bg-gray-800 text-white hover:opacity-90"
           >
-            Mentés és beküldés
+            Beküldés
           </button>
 
         </div>

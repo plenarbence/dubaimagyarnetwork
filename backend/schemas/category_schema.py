@@ -22,7 +22,7 @@ class CategoryOut(BaseModel):
     name: str
     parent_id: Optional[int]
     order_index: int
-    listing_count: int
+    listing_count: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -31,4 +31,33 @@ class CategoryOut(BaseModel):
 class CategoryRename(BaseModel):
     name: str = Field(..., min_length=1)
 
+
+# publikus kategoria lekeres
+class PublicCategoryOut(BaseModel):
+    id: int
+    name: str
+    slug: str
+    listing_count: int
+
+
+# SEO schema
+class CategorySEOSchema(BaseModel):
+    id: int
+    name: str
+    slug: str
+
+    seo_title: Optional[str] = None
+    seo_description: Optional[str] = None
+    seo_h1: Optional[str] = None
+    seo_intro: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+# publikus sub-kategoria lekeres
+class PublicSubCategoryOut(BaseModel):
+    id: int
+    name: str
+    listing_count: int
 

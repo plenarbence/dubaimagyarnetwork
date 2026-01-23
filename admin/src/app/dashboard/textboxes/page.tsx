@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import TextboxEditor from "./TextboxEditor";
 
-const CONTENT_KEYS = ["contact", "privacy", "providers", "terms"];
+const CONTENT_KEYS = ["aboutus", "contact", "privacy", "faq", "terms"];
 
 export default function TextboxesPage() {
   const [selectedKey, setSelectedKey] = useState<string>("contact");

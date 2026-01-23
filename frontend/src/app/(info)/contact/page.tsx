@@ -1,4 +1,13 @@
 import { Mail, Phone, MessageCircle } from "lucide-react";
+import SuggestionBox from "./SuggestionBox";
+
+
+export const metadata = {
+  title: "Dubai Magyar Network - Kapcsolat",
+  description:
+    "Kapcsolatfelvétel a Dubai Magyar Networkkel. Írj nekünk e-mailben, hívj telefonon vagy vedd fel velünk a kapcsolatot WhatsAppon.",
+};
+
 
 type ContactContent = {
   title: string;
@@ -79,6 +88,9 @@ export default async function ContactPage() {
           </a>
         </p>
       </div>
+
+      <SuggestionBox />
+
     </div>
   );
 }

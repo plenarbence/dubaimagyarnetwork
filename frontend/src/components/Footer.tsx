@@ -5,16 +5,15 @@ export default function Footer() {
     <footer className="bg-zinc-700 text-white text-sm py-4 mt-8">
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Bal oldal - navigáció */}
-        <div className="flex gap-6">
+        <div className="flex items-center gap-6">
           <Link href="/">Főoldal</Link>
-          <Link href="/listings">Szolgáltatások</Link>
-          <Link href="/providers">Hirdetőknek</Link>
+          <Link href="/faq">GY.I.K.</Link>
           <Link href="/contact">Kapcsolat</Link>
         </div>
 
         {/* Közép - copyright */}
         <div className="text-center text-xs">
-          <p>© 2025 Dubai Magyar Network. Minden jog fenntartva.</p>
+          <p>© 2026 Dubai Magyar Network. Minden jog fenntartva.</p>
         </div>
 
         {/* Jobb oldal - kontakt + jogi linkek */}

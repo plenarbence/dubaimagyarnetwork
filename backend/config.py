@@ -47,7 +47,10 @@ R2_BUCKET = os.getenv("R2_BUCKET")
 R2_PUBLIC_BASE = os.getenv("R2_PUBLIC_BASE")
 IMAGE_PREFIX = os.getenv("IMAGE_PREFIX")
 
-
+# -----------------------------
+# Email service
+# -----------------------------
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 
 
 
@@ -66,6 +69,7 @@ _required_vars = {
     "R2_BUCKET" : R2_BUCKET,
     "R2_PUBLIC_BASE" : R2_PUBLIC_BASE,
     "IMAGE_PREFIX" : IMAGE_PREFIX,
+    "RESEND_API_KEY" : RESEND_API_KEY,
 }
 
 _missing = [name for name, val in _required_vars.items() if val in (None, "", [])]

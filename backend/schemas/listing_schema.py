@@ -3,8 +3,9 @@ from typing import Optional, List, Annotated
 from pydantic import BaseModel, Field, StringConstraints
 from backend.models.listing import ListingStatus
 from backend.schemas.image_schema import ImageResponse
-from backend.schemas.rating_schema import RatingResponse
+from backend.schemas.rating_schema import RatingResponse, PublicRatingOut
 from backend.schemas.category_schema import CategoryOut
+
 
 
 
@@ -210,3 +211,73 @@ class ListingPreviewResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
+
+# ===========================
+# ✅ Output schema –  public listazo kartya
+# ===========================
+class MyPublicListingCard(BaseModel):
+    # -----------------------------
+    # Alapadatok
+    # -----------------------------
+    id: int
+    title: str
+
+    # -----------------------------
+    # Opcionális tagek
+    # -----------------------------
+    tags: Optional[List[str]] = None
+
+    # -----------------------------
+    # Rating (aggregált adatok)
+    # -----------------------------
+    rating_avg: Optional[float] = None
+    rating_count: int = 0
+
+    # -----------------------------
+    # Main image url
+    # -----------------------------
+    main_image_url: Optional[str] = None
+
+    is_featured: bool
+
+    class Config:
+        from_attributes = True
+
+
+
+
+
+# ===========================
+# ✅ Output schema –  public listing page
+# ===========================
+class PublicListingDetailOut(BaseModel):
+    # ---- alap ----
+    title: str
+    description: str
+
+    # ---- üzleti / kontakt ----
+    company: str | None = None
+    email: str | None = None
+    phone_number: str | None = None
+    website: str | None = None
+    whatsapp: str | None = None
+    instagram: str | None = None
+    tiktok: str | None = None
+    facebook: str | None = None
+    youtube: str | None = None
+    location: str | None = None
+    tags: List[str] | None = None
+
+    # ---- rating (aggregált) ----
+    rating_avg: float | None = None
+    rating_count: int = 0
+
+    # ---- képek ----
+    image_url_list: List[str] = []
+
+    # ---- rating lista ----
+    ratings_list: List[PublicRatingOut] = []
+
+    class Config:
+        from_attributes = True

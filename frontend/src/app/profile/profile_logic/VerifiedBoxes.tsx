@@ -25,8 +25,8 @@ export default function VerifiedBoxes({ user }: { user: UserResponse }) {
         "
       >
         <ListingsBox/>
-        <PaymentsBox/>
-        <PromotionsBox/>
+        {/*<PaymentsBox/>*/}
+        {/*<PromotionsBox/>*/}
         <RatingsBox/>
         <OverviewBox user={user} />
         

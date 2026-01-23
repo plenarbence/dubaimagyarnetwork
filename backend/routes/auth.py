@@ -3,14 +3,15 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database import get_db
-from backend.schemas.user_schema import UserCreate, UserResponse
+from backend.schemas.user_schema import UserCreate, UserResponse, ChangePasswordIn
 from backend.routes.auth_logic.jwt_handler import verify_access_token
 
 # 🔹 üzleti logikák (tiszta függvények)
 from backend.routes.auth_logic.register import register_user
 from backend.routes.auth_logic.login import login_user
 from backend.routes.auth_logic.get_current_user import get_current_user
-from backend.routes.auth_logic.verify_email import verify_email
+from backend.routes.auth_logic.change_password import change_password
+from fastapi import status
 
 # -------------------------------
 # ✅ Router beállítása
@@ -50,14 +51,21 @@ def verify_token(email: str = Depends(verify_access_token)):
     return {"valid": True}
 
 
-
-
 # ================================
-# ✅ EMAIL VERIFIKÁCIÓ (átmeneti)
+# ✅ JELSZÓ MEGVÁLTOZTATÁSA (bejelentkezve)
 # ================================
-@router.post("/verify-email")
-async def verify_email_route(
-    current_email: str = Depends(verify_access_token),
-    db: AsyncSession = Depends(get_db)
+@router.post("/change-password", status_code=status.HTTP_204_NO_CONTENT)
+async def change_password_endpoint(
+    data: ChangePasswordIn,
+    email: str = Depends(verify_access_token),
+    db: AsyncSession = Depends(get_db),
 ):
-    return await verify_email(current_email, db)
+    await change_password(
+        db=db,
+        email=email,
+        old_password=data.old_password,
+        new_password=data.new_password,
+        new_password_confirm=data.new_password_confirm,
+    )
+    return None
+

@@ -10,6 +10,7 @@ import ListingImageDesktop from "../../components/ListingImageDesktop";
 import ListingImageMobile from "../../components/ListingImageMobile";
 import LocationLink from "../../components/LocationLink";
 import ContactLinks from "../../components/ContactLinks";
+import HandleStatus from "../../components/HandleStatus";
 
 
 type ListingPreview = {
@@ -169,6 +170,14 @@ export default function ListingPreviewPage() {
             </div>
           )}
 
+
+          <HandleStatus
+            listing_id={Number(id)}
+            status={listing.status}
+            admin_comment={listing.admin_comment}
+          />
+
+
         </div>
       </div>
 
@@ -205,6 +214,14 @@ export default function ListingPreviewPage() {
             {listing.description}
           </div>
         )}
+
+
+        <HandleStatus
+          listing_id={Number(id)}
+          status={listing.status}
+          admin_comment={listing.admin_comment}
+        />
+
 
       </div>
     </div>

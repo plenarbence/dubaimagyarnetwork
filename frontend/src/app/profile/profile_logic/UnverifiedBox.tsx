@@ -30,10 +30,10 @@ export default function UnverifiedBox({ user }: { user: UserResponse }) {
       <div className="flex flex-col gap-3">
 
         <button
-          onClick={() => router.push("/profile/resend-verification")}
+          onClick={() => router.push("/profile/verify-email")}
           className="w-full bg-gray-700 text-white py-2 rounded hover:opacity-90 transition"
         >
-          Megerősítő email újraküldése
+          Email cím megerősítése
         </button>
 
         <button
@@ -52,13 +52,16 @@ export default function UnverifiedBox({ user }: { user: UserResponse }) {
 
       </div>
 
+      
       {/* Fiók törlése - jobb alsó sarok */}
+      {/*
       <button
         onClick={() => router.push("/profile/delete-profile")}
         className="absolute bottom-3 right-3 text-sm text-black underline"
       >
         Fiók törlése
-      </button>
+      </button> */}
+      
     </div>
   );
 }

@@ -15,6 +15,17 @@ class Category(Base):
     parent_id = Column(Integer, ForeignKey("categories.id", ondelete="CASCADE"), nullable=True)
     order_index = Column(Integer, default=0, nullable=False)
 
+    
+
+    # --- SEO ---
+    slug = Column(String(120), nullable=False, unique=True, index=True)
+
+    seo_title = Column(String(255), nullable=True)
+    seo_description = Column(String(500), nullable=True)
+    seo_h1 = Column(String(255), nullable=True)
+    seo_intro = Column(String, nullable=True)
+
+
     # --- Relationships ---
     parent = relationship(
         "Category",
