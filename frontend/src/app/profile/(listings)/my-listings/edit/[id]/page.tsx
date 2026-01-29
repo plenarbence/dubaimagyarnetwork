@@ -53,7 +53,7 @@ export default function EditListingPage() {
   const [images, setImages] = useState<ListingImage[]>([]);
   const [imageLoadError, setImageLoadError] = useState(false);
 
-
+  const [uploading, setUploading] = useState(false);
 
 
 
@@ -319,7 +319,10 @@ export default function EditListingPage() {
               Még nincs feltöltött kép ehhez a hirdetéshez.
             </p>
           ) : (
+            <>
             <div className="grid grid-cols-5 gap-3">
+
+
               {images.map((img) => (
                 <div
                   key={img.id}
@@ -334,10 +337,13 @@ export default function EditListingPage() {
                   />
 
                   {img.is_main && (
-                    <span className="absolute top-1 left-1 bg-green-600 text-white text-xs px-2 py-0.5 rounded">
-                      Borítókép
-                    </span>
+                    <span
+                      className="absolute top-1 left-1 w-4 h-4 border border-green-600 shadow-sm rounded-sm bg-green-500"  
+                      title="Ez a borítókép"
+                    />
                   )}
+
+
 
                   {/* 🟩 borítókép kiválasztó gomb (ha nem ez a fő kép) */}
                   {!img.is_main && (
@@ -438,9 +444,20 @@ export default function EditListingPage() {
                 </div>
               ))}
             </div>
+
+              <div className="flex items-center gap-2 text-sm text-gray-600 mt-6">
+                <span className="w-4 h-4 border border-green-600 shadow-sm rounded-sm bg-green-500" />
+                <span>Borítókép</span>
+              </div>
+              </>
           )}
         </div>
 
+        {uploading && (
+          <p className="text-sm text-gray-500 italic mt-2">
+            Feltöltés folyamatban…
+          </p>
+        )}
 
 
         {/* ---- KÉPFELTÖLTÉS ---- */}
@@ -470,6 +487,8 @@ export default function EditListingPage() {
                 return;
               }
 
+              setUploading(true);
+              
               for (const file of files) {
                 const formData = new FormData();
                 formData.append("file", file);
@@ -498,9 +517,9 @@ export default function EditListingPage() {
                   console.error("Image upload error:", err);
                   alert("Hálózati hiba a képfeltöltésnél.");
                   break;
-                }
+                } 
               }
-
+              setUploading(false);
               e.target.value = ""; // input reset
             }}
           />

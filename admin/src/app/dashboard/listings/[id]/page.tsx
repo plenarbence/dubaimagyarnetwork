@@ -97,7 +97,7 @@ export default function AdminListingDetailPage() {
   const fetchCategories = useCallback(async () => {
 
     try {
-      const res = await fetch(`${API_URL}/categories`);
+      const res = await fetch(`${API_URL}/categories/`);
       if (!res.ok) return;
 
       const data = await res.json();

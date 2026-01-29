@@ -75,6 +75,28 @@ export default function VerifyEmailPage() {
         </h1>
 
         <form onSubmit={handleVerifyCode} className="flex flex-col gap-5">
+          
+          <p className="text-sm text-gray-600 text-center">
+            Először kérj egy megerősítő kódot.  
+            A kódot az email címedre küldjük, és 10 percig érvényes.
+          </p>
+
+
+          <button
+            type="button"
+            onClick={handleRequestCode}
+            disabled={loading || cooldown > 0}
+            className="border border-black text-black font-medium py-3 rounded-lg hover:bg-black hover:text-white transition disabled:opacity-50"
+          >
+            {cooldown > 0
+              ? `Kód újraküldése (${cooldown}s)`
+              : "Kód küldése emailben"}
+          </button>
+
+          <p className="text-sm text-gray-600 text-center">
+            Írd be az emailben kapott 6 jegyű megerősítő kódot.
+          </p>
+
           <input
             type="text"
             placeholder="6 jegyű kód"
@@ -95,16 +117,7 @@ export default function VerifyEmailPage() {
             <p className="text-gray-600 text-sm text-center">{info}</p>
           )}
 
-          <button
-            type="button"
-            onClick={handleRequestCode}
-            disabled={loading || cooldown > 0}
-            className="border border-black text-black font-medium py-3 rounded-lg hover:bg-black hover:text-white transition disabled:opacity-50"
-          >
-            {cooldown > 0
-              ? `Kód újraküldése (${cooldown}s)`
-              : "Megerősítő kód küldése"}
-          </button>
+
 
           <button
             type="submit"

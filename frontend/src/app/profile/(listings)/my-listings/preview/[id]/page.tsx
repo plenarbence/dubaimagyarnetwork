@@ -209,6 +209,17 @@ export default function ListingPreviewPage() {
 
         <LocationLink location={listing.location} />
 
+        <ContactLinks
+          email={listing.email}
+          phone_number={listing.phone_number}
+          website={listing.website}
+          whatsapp={listing.whatsapp}
+          instagram={listing.instagram}
+          tiktok={listing.tiktok}
+          facebook={listing.facebook}
+          youtube={listing.youtube}
+        />
+
         {listing.description && (
           <div className="mt-4 text-sm text-gray-700 whitespace-pre-line leading-relaxed">
             {listing.description}

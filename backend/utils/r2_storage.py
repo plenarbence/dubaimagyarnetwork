@@ -52,7 +52,7 @@ class R2ImageStorage:
         file_obj,
         listing_id: int,
         *,
-        canvas_size: Tuple[int, int] = (900, 1200),
+        canvas_size: Tuple[int, int] = (450, 600),
         quality: int = 90,
     ) -> Tuple[str, str]:
         """
