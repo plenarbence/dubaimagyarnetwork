@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getPublicPosters(): Promise<PosterPublic[]> {
   const res = await fetch(`${API_URL}/posters`, {
-    next: { revalidate: 300 }, // 5 perc
+    cache: "no-store",
   });
 
   if (!res.ok) return [];

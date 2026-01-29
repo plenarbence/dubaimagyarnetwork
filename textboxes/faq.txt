@@ -1,0 +1,75 @@
+<h1 style="font-size: 1.5rem; font-weight: 700;">
+  Gyakran ismételt kérdések
+</h1><br />
+
+<p style="font-weight: 600;">
+  Mi a Dubai Magyar Network célja?
+</p>
+<p>
+  A Dubai Magyar Network célja egy átlátható és könnyen használható felület létrehozása, ahol a magyar nyelvű szolgáltatók és a szolgáltatást kereső magyar közönség könnyen egymásra találhatnak. Így mindenki gyorsan rátalálhat a számára megfelelő szolgáltatásokra, és a közösség is erősödik.
+</p><br />
+
+<p style="font-weight: 600;">
+  Kinek szól ez az oldal?
+</p>
+<p>
+  Az oldal a Dubaiban élő és a városba látogató magyaroknak szól. Akár mindennapi szolgáltatásokat, akár turizmussal kapcsolatos lehetőségeket keresel, itt gyorsan megtalálhatod a számodra releváns magyar nyelvű szolgáltatásokat.
+</p><br />
+
+<p style="font-weight: 600;">
+  Hogyan tudok szolgáltatást vagy vállalkozást regisztrálni az oldalon?
+</p>
+<p>
+  Először regisztrálnod kell az oldalon, ezt követően tudod létrehozni a saját hirdetésedet vagy hirdetéseidet.
+A beküldött hirdetéseket minden esetben adminisztrátorunk ellenőrzi és jóváhagyja, ami általában néhány órát vesz igénybe. A jóváhagyás után a hirdetés megjelenik a weboldalon.
+</p><br />
+
+<p style="font-weight: 600;">
+  Mennyibe kerül a regisztráció és az oldal használata?
+</p>
+<p>
+A <strong>felhasználók</strong> számára a regisztráció és az oldal használata teljesen <strong>INGYENES</strong>.
+</p>
+<p>A <strong>szolgáltatók</strong> részére a hirdetések feltöltése kezdetben szintén díjmentes, azonban a későbbiekben a hirdetések megjelenítése havi díjhoz kötött lesz.</p><br />
+
+<p style="font-weight: 600;">
+  Hogyan működik az értékelési rendszer?
+</p>
+<p>
+  Értékelést írni regisztráció után lehet, és minden hirdetéshez egy értékelést adhatsz le.
+</p><br />
+
+<p style="font-weight: 600;">
+  Mennyire megbízhatóak az oldalon található szolgáltatók?
+</p>
+<p>
+  Az oldalon megjelenő vállalkozásokat minden esetben ellenőrizzük a megjelenés előtt, azonban a szolgáltatások minőségéért nem tudunk felelősséget vállalni. Éppen ezért különösen fontosnak tartjuk az értékeléseket: ha kipróbáltál egy szolgáltatást, egy visszajelzéssel nagyban segítheted a többi érdeklődőt a döntésben.
+</p><br />
+
+<p style="font-weight: 600;">
+  Mi a teendő, ha a szolgáltatásomhoz nem találok megfelelő kategóriát?
+</p>
+<p>
+  Ha nem találsz megfelelő kategóriát, a hirdetés szerkesztésekor nyugodtan hagyd üresen a kategória mezőt. Adminisztrátorunk átnézi a hirdetést, és szükség esetén besorolja a megfelelő kategóriába, vagy új kategóriát hoz létre.
+</p><br />
+
+<p style="font-weight: 600;">
+  Hogyan működik a főoldalon található hirdetési felület?
+</p>
+<p>
+  A főoldalon található hirdetési felületet bárki igénybe veheti. A megjelenés díját a hirdetés témája és jellege alapján határozzuk meg. További részletekért fordulj hozzánk bizalommal.
+</p><br />
+
+<p style="font-weight: 600;">
+  Hogyan tudom a hirdetésemet kiemelt hirdetésként megjeleníteni a főoldalon?
+</p>
+<p>
+  A hirdetés kiemelt megjelenítése jelenleg személyes egyeztetés után lehetséges. A későbbiekben egy automatizált megoldást is tervezünk erre a funkcióra, hogy a kiemelés egyszerűen és gyorsan elérhető legyen.
+</p><br />
+
+
+
+
+<p>
+  Ha bármilyen más kérdésed van, fordulj hozzánk bizalommal!
+</p>

@@ -1,0 +1,12 @@
+<p className="mb-4">
+  A <strong>Dubai Magyar Network</strong> célja, hogy egy átlátható és egyszerűen használható felületet hozzon létre, ahol a Dubaiban élő magyarok és a városba látogató turisták egyaránt könnyen megtalálhatják a számukra releváns magyar nyelvű szolgáltatásokat.
+</p><br />
+
+<p className="mb-4">
+  Ez a platform a szolgáltatóknak lehetőséget ad, hogy közvetlenül elérjék a magyar nyelvű közönséget, és növeljék üzleti lehetőségeiket. A felhasználók számára pedig egy átlátható, könnyen használható felületet kínál, ahol gyorsan megtalálhatják a számukra megfelelő magyar nyelvű szolgáltatásokat Dubaiban.
+</p><br />
+
+<p className="mb-4">
+  A Dubai Magyar Network lehetővé teszi, hogy a felhasználók értékeljék a kipróbált szolgáltatásokat, így segítve másokat a legjobb választásban, és növelve a szolgáltatók bizalmát. Így együtt építhetünk egy megbízható magyar közösséget Dubaiban.
+</p>
+

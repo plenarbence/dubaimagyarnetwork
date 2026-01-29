@@ -3,9 +3,9 @@
 </h1><br />
 
       <p className="mb-4">
-        A jelen weboldalt üzemelteti: <strong>REPLACE_WITH_COMPANY_NAME</strong>.<br />
-        Székhely: <strong>REPLACE_WITH_COMPANY_ADDRESS</strong>.<br />
-        Kapcsolat: <strong>REPLACE_WITH_COMPANY_EMAIL</strong>.<br />
+        A jelen weboldalt üzemelteti: <strong>Plettitrend Marketing - FZCO</strong>.<br />
+        Székhely: <strong>IFZA Business Park, DDP 5124-001, Dubai Silicon Oasis, Dubai, UAE</strong>.<br />
+        Kapcsolat: <strong>info@dubaimagyarnetwork.com</strong>.<br />
       </p><br />
 
       <h2 className="text-xl font-semibold mt-6 mb-2">1. A szolgáltatás jellege</h2>
@@ -50,12 +50,12 @@
 
       <h2 className="text-xl font-semibold mt-6 mb-2">6. Alkalmazandó jog</h2>
       <p className="mb-4">
-        A jelen feltételekre a szolgáltatás nyújtásának helye szerinti jog (REPLACE_WITH_APPLICABLE_JURISDICTION)
+        A jelen feltételekre a szolgáltatás nyújtásának helye szerinti jog 
         az irányadó. (Például: Dubai, United Arab Emirates.)
       </p><br />
 
       <p className="mt-10 text-sm text-gray-600">
-        Üzemeltető: <strong>REPLACE_WITH_COMPANY_NAME</strong> · <br />Licence: <strong>REPLACE_WITH_TRADE_LICENSE</strong><br /><br />
-        Utolsó frissítés: 2025-10-03
+        Üzemeltető: <strong>Plettitrend Marketing - FZCO</strong> · <br />Licenc: <strong>51524</strong><br /><br />
+        Utolsó frissítés: 2026-01-24
       </p>
     </div>

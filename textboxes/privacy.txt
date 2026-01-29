@@ -3,23 +3,23 @@
 </h1><br />
 
       <p className="mb-4">
-        A dubaimagyarnetwork.com (üzemeltető: <strong>REPLACE_WITH_COMPANY_NAME</strong>)
+        A dubaimagyarnetwork.com (üzemeltető: <strong>Plettitrend Marketing - FZCO</strong>)
         elkötelezett a személyes adatok védelme mellett. Az alábbiakban ismertetjük,
         milyen adatokat gyűjtünk, mire használjuk és hogyan biztosítjuk az adatok védelmét.
       </p><br />
 
       <h2 className="text-xl font-semibold mt-6 mb-2">1. Adatkezelő</h2>
       <p className="mb-4">
-        Adatkezelő: <strong>REPLACE_WITH_COMPANY_NAME</strong><br />
-        Székhely: <strong>REPLACE_WITH_COMPANY_ADDRESS</strong><br />
-        E-mail: <strong>REPLACE_WITH_COMPANY_EMAIL</strong><br />
-        Trade License: <strong>REPLACE_WITH_TRADE_LICENSE</strong>
+        Adatkezelő: <strong>Plettitrend Marketing - FZCO</strong><br />
+        Székhely: <strong>IFZA Business Park, DDP 5124-001, Dubai Silicon Oasis, Dubai, UAE</strong><br />
+        E-mail: <strong>info@dubaimagyarnetwork.com</strong><br />
+        Licenc: <strong>51524</strong>
       </p><br />
 
       <h2 className="text-xl font-semibold mt-6 mb-2">2. Milyen adatokat gyűjtünk</h2>
       <p className="mb-4">
-        – Regisztrációkor: név, e-mail cím, telefonszám, opcionálisan cégadatok.<br />
-        – Hirdetés beküldésekor: hirdetés szövege, képek, ár, elérhetőségek.<br />
+        – Regisztrációkor: e-mail cím<br />
+        – Hirdetés beküldésekor: hirdetés szövege, képek, elérhetőségek.<br />
         – Fizetéskor: a tényleges bankkártya-adatokat a fizetési szolgáltató (pl. Stripe) kezeli; mi csak a tranzakció metaadatait tároljuk (pl. tranzakció ID).
       </p><br />
 
@@ -48,11 +48,11 @@
       <p className="mb-4">
         Ön jogosult kérni személyes adatai másolatát, helyesbítését, törlését vagy
         adatkezelés korlátozását. Kérést az alábbi e-mail címen fogadunk:
-        <strong> REPLACE_WITH_COMPANY_EMAIL</strong>.
+        <strong> info@dubaimagyarnetwork.com</strong>.
       </p><br />
 
       <p className="mt-10 text-sm text-gray-600">
-        Adatkezelő: <strong>REPLACE_WITH_COMPANY_NAME</strong> · <br />Székhely: <strong>REPLACE_WITH_COMPANY_ADDRESS</strong><br />
-        Trade License: <strong>REPLACE_WITH_TRADE_LICENSE</strong> · <br /><br />Utolsó frissítés: 2025-10-03
+        Adatkezelő: <strong>Plettitrend Marketing - FZCO</strong> · <br />Székhely: <strong>IFZA Business Park, DDP 5124-001, Dubai Silicon Oasis, Dubai, UAE</strong><br />
+        Licenc: <strong>51524</strong> · <br /><br />Utolsó frissítés: 2026-01-24
       </p>
     </div>
