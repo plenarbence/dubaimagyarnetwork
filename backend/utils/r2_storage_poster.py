@@ -51,7 +51,7 @@ class R2PosterStorage:
         self,
         file_obj,
         *,
-        canvas_size: Tuple[int, int] = (2400, 1200),  # 2:1 fekvő
+        canvas_size: Tuple[int, int] = (1800, 900),  # 2:1 fekvő
         quality: int = 90,
     ) -> Tuple[str, str]:
         """
