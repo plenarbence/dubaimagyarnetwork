@@ -71,14 +71,16 @@ export default function Navbar() {
 
       {/* Közép desktopon, bal oldal mobilon – logo */}
       <div className="flex justify-start md:justify-center flex-1 md:flex-none">
-        <Image
-          src="/logo_dmn_transparent.png"
-          alt="DMN Logo"
-          height={60}
-          width={60}
-          priority
-          unoptimized
-        />
+        <Link href="/" aria-label="Főoldal">
+          <Image
+            src="/dmn_logo.png"
+            alt="DMN Logo"
+            height={60}
+            width={60}
+            priority
+            unoptimized
+          />
+        </Link>
       </div>
 
       {/* Jobb oldal  – bejelentkezés / profil / hamburger */}
