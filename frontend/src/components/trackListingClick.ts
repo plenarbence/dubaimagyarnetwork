@@ -19,7 +19,9 @@ export function trackListingClick(
   try {
     fetch(
       `${API_URL}/listings/${listingId}/click?target=${target}`,
-      { method: "POST" }
+      { method: "POST",
+        keepalive: true,
+       }
     );
   } catch {
     // best-effort: mindent lenyelünk
