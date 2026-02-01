@@ -103,7 +103,7 @@ async function handleSubmit(e: React.FormEvent) {
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-semibold mb-6">Új hirdetés létrehozása</h1>
 
-      <form onSubmit={handleSubmit} onKeyDown={(e) => {if (e.key === "Enter") e.preventDefault(); }} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} onKeyDown={(e) => {if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") e.preventDefault(); }} className="flex flex-col gap-4">
       
         {/* ---- TITLE ---- */}
         <TitleInput value={title} onChange={setTitle} />

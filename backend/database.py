@@ -8,8 +8,13 @@ from backend.config import DATABASE_URL
 # -----------------------------
 engine = create_async_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+    pool_pre_ping=True,   # <-- EZ OLDJA MEG A HIBÁT
+    pool_size=5,
+    max_overflow=10,
+    pool_recycle=1800,    # 30 perc
+    connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {},
 )
+
 
 # -----------------------------
 # ✅ Session & Base
