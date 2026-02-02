@@ -10,3 +10,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+
+
+/* alap */
+details.faq {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 0;
+}
+
+/* summary reset */
+details.faq summary {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 600;
+  position: relative;
+  padding-right: 24px;
+}
+
+/* BROWSER NYÍL KIKAPCS */
+details.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+/* SAJÁT NYÍL */
+details.faq summary::after {
+  content: "▾";
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 22px; 
+  transition: transform 0.2s ease;
+}
+
+/* nyitott állapot */
+details.faq[open] summary::after {
+  transform: rotate(180deg);
+}
+
+/* válasz */
+details.faq p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+}

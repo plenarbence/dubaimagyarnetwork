@@ -8,6 +8,8 @@ import {
   Youtube,
 } from "lucide-react";
 
+import { SiTiktok } from "react-icons/si";
+
 type ContactLinksProps = {
   email?: string | null;
   phone_number?: string | null;
@@ -58,10 +60,10 @@ export default function ContactLinks({
     tiktok && {
       label: `@${tiktok}`,
       href: `https://www.tiktok.com/@${tiktok}`,
-      Icon: MessageCircle,
+      Icon: SiTiktok,
     },
     facebook && {
-        label: "Facebook",
+        label: `@${facebook}`,
         href: `https://facebook.com/${facebook.replace(/^@/, "")}`,
         Icon: Facebook,
     },

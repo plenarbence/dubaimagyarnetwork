@@ -73,10 +73,11 @@ export default function Navbar() {
       <div className="flex justify-start md:justify-center flex-1 md:flex-none">
         <Link href="/" aria-label="Főoldal">
           <Image
+            className="-mt-2"
             src="/dmn_logo.png"
             alt="DMN Logo"
-            height={60}
-            width={60}
+            height={70}
+            width={70}
             priority
             unoptimized
           />
