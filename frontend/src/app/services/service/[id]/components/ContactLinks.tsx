@@ -8,6 +8,8 @@ import {
   Youtube,
 } from "lucide-react";
 
+import { SiTiktok } from "react-icons/si";
+
 import { trackListingClick } from "../../../../../components/trackListingClick";
 
 
@@ -69,11 +71,11 @@ export default function ContactLinks({
     tiktok && {
       label: `@${tiktok}`,
       href: `https://www.tiktok.com/@${tiktok}`,
-      Icon: MessageCircle,
+      Icon: SiTiktok,
       target: "tiktok",
     },
     facebook && {
-        label: "Facebook",
+        label: `@${facebook}`,
         href: `https://facebook.com/${facebook.replace(/^@/, "")}`,
         Icon: Facebook,
         target: "facebook",
