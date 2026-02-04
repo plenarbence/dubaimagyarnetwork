@@ -9,7 +9,7 @@ from backend.schemas.category_schema import PublicSubCategoryOut
 async def public_get_subcategories(
     db: AsyncSession,
     parent_category_id: int,
-) -> list[PublicSubCategoryOut]:
+) -> tuple[list[PublicSubCategoryOut], int]:
     """
     Alkategóriák lekérése egy főkategória alatt,
     aktív hirdetések számával.
@@ -34,11 +34,22 @@ async def public_get_subcategories(
     result = await db.execute(stmt)
     rows = result.all()
 
-    return [
-        PublicSubCategoryOut(
-            id=row.id,
-            name=row.name,
-            listing_count=row.listing_count or 0,
-        )
-        for row in rows
-    ]
+
+
+    main_count_stmt = select(func.count(Listing.id)).where(
+        Listing.category_id == parent_category_id,
+        Listing.status == ListingStatus.active,
+    )
+    main_count = (await db.execute(main_count_stmt)).scalar() or 0
+
+    return (
+        [
+            PublicSubCategoryOut(
+                id=row.id,
+                name=row.name,
+                listing_count=row.listing_count or 0,
+            )
+            for row in rows
+        ],
+        main_count,
+    )

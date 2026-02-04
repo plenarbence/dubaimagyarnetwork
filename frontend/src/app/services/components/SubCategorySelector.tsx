@@ -21,6 +21,7 @@ export default function SubCategorySelector({
 }: Props) {
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mainCount, setMainCount] = useState(0);
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -30,9 +31,11 @@ export default function SubCategorySelector({
           `${process.env.NEXT_PUBLIC_API_URL}/categories/public/${parentCategoryId}/subcategories`
         );
         if (!res.ok) return;
-
+        
         const data = await res.json();
-        setSubCategories(data);
+        setSubCategories(data.subcategories);
+        setMainCount(data.main_count);
+
       } finally {
         setLoading(false);
       }
@@ -54,10 +57,11 @@ export default function SubCategorySelector({
     );
   }
 
-  const totalCount = subCategories.reduce(
-    (sum, s) => sum + s.listing_count,
-    0
-  );
+
+  const totalCount =
+    mainCount +
+    subCategories.reduce((sum, s) => sum + s.listing_count, 0);
+
 
   return (
     <div className="flex gap-2 overflow-x-auto pb-1">

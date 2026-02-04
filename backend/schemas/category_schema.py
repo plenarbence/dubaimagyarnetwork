@@ -61,3 +61,8 @@ class PublicSubCategoryOut(BaseModel):
     name: str
     listing_count: int
 
+# counters
+class PublicSubCategoryResponse(BaseModel):
+    subcategories: List[PublicSubCategoryOut]
+    main_count: int
+
