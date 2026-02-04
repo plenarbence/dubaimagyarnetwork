@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy import text
+from sqlalchemy import or_
 
 from backend.models.listing import Listing, ListingStatus
 from backend.models.image import Image
@@ -56,7 +57,13 @@ async def get_public_listing_cards(
         if category:
             if category.parent_id is None:
                 subq = select(Category.id).where(Category.parent_id == category_id)
-                stmt = stmt.where(Listing.category_id.in_(subq))
+
+                stmt = stmt.where(
+                    or_(
+                        Listing.category_id.in_(subq),
+                        Listing.category_id == category_id,
+                    )                    
+                    )
             else:
                 stmt = stmt.where(Listing.category_id == category_id)
 

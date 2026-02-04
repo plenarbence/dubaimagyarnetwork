@@ -6,7 +6,7 @@ from backend.database import get_db
 from backend.routes.admin_logic.verify_admin import verify_admin_token
 
 # --- sémák és modellek ---
-from backend.schemas.category_schema import CategoryCreate, CategoryOut, CategoryRename, PublicCategoryOut, CategorySEOSchema, PublicSubCategoryOut
+from backend.schemas.category_schema import CategoryCreate, CategoryOut, CategoryRename, PublicCategoryOut, CategorySEOSchema, PublicSubCategoryOut, PublicSubCategoryResponse
 
 # --- logikai modulok ---
 from backend.routes.categories_logic.create_category import create_category_logic
@@ -126,13 +126,18 @@ async def get_category_by_slug_endpoint(
 # ============================================================
 @router.get(
     "/public/{parent_id}/subcategories",
-    response_model=list[PublicSubCategoryOut],
+    response_model=PublicSubCategoryResponse,
 )
 async def get_public_subcategories_endpoint(
     parent_id: int,
     db: AsyncSession = Depends(get_db),
 ):
-    return await public_get_subcategories(
+    subcategories, main_count = await public_get_subcategories(
         db=db,
         parent_category_id=parent_id,
     )
+
+    return {
+        "subcategories": subcategories,
+        "main_count": main_count,
+    }
