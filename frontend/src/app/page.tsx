@@ -1,5 +1,6 @@
 import HomePosters from "./home_logic/HomePosters";
 import HomeFeatured from "./home_logic/HomeFeatured";
+import StatsSection from "./home_logic/StatsSection";
 
 export const metadata = {
   title: "Dubai Magyar Network",
@@ -41,6 +42,9 @@ export default async function Home() {
         </h1>
 
         <HomePosters />
+
+        <StatsSection />
+
         <HomeFeatured />
 
 

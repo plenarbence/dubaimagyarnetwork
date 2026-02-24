@@ -285,7 +285,11 @@ export default function EditListingPage() {
       <form
         onSubmit={(e) => e.preventDefault()}
         onKeyDown={(e) => {
-          if (e.key === "Enter") e.preventDefault();
+          if (
+            e.key === "Enter" &&
+            (e.target as HTMLElement).tagName !== "TEXTAREA"
+          )
+            e.preventDefault();
         }}
         className="flex flex-col gap-4"
       >

@@ -9,7 +9,7 @@ class RatingResponse(BaseModel):
     listing_id: int
 
     rating: int                    # 1–5
-    text: Optional[str] = None     # max 200
+    text: Optional[str] = None     # max 1000
     owner_response: Optional[str] = None
 
     created_at: datetime
@@ -47,7 +47,7 @@ class RatingCreateIn(BaseModel):
 
     text: Optional[str] = Field(
         default=None,
-        max_length=200,
+        max_length=1000,
         description="Szöveges értékelés (max 200 karakter)",
     )
 

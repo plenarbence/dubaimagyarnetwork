@@ -246,7 +246,11 @@ export default function AdminListingDetailPage() {
   };
 
   const saveCategory = async () => {
-    if (!categoryDraft.childId) return;
+    const categoryIdToSave =
+      categoryDraft.childId || categoryDraft.parentId;
+
+    if (!categoryIdToSave) return;
+
 
     const token = localStorage.getItem("admin_token");
     if (!token) return;
@@ -262,7 +266,7 @@ export default function AdminListingDetailPage() {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(Number(categoryDraft.childId)),
+          body: JSON.stringify(Number(categoryIdToSave)),
         }
       );
 
@@ -474,7 +478,11 @@ export default function AdminListingDetailPage() {
               <div className="flex gap-3">
                 <button
                   onClick={saveCategory}
-                  disabled={isSavingCategory || !categoryDraft.childId}
+                  disabled={
+                    isSavingCategory ||
+                    (!categoryDraft.childId && !categoryDraft.parentId)
+                  }
+
                   className="px-3 py-1 rounded border border-zinc-600 text-zinc-300 hover:text-white disabled:opacity-50"
                 >
                   save

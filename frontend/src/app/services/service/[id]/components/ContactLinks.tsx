@@ -57,7 +57,7 @@ export default function ContactLinks({
       target: "website",
     },
     whatsapp && {
-      label: "WhatsApp",
+      label: `WhatsApp: ${whatsapp}`,
       href: `https://wa.me/${whatsapp.replace(/\D/g, "")}`,
       Icon: MessageCircle,
       target: "whatsapp",
