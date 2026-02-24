@@ -149,7 +149,7 @@ export default function ListingRatings({
             <textarea
               value={text}
               onChange={e => setText(e.target.value)}
-              maxLength={200}
+              maxLength={1000}
               rows={3}
               className="w-full border rounded p-2"
               placeholder="Írd le a tapasztalatod…"

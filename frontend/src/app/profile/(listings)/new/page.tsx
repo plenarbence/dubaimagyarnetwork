@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { useAuthUser } from "../../profile_logic/useAuthUser";
 import { useCreateListingStates } from "../listings_logic/useCreateListingStates";
@@ -26,6 +27,9 @@ export default function CreateListingPage() {
     category, setCategory,
   } = useCreateListingStates();
 
+  const [submitting, setSubmitting] = useState(false);
+
+
   // Amíg tölt a token ellenőrzés → ne villogjon az oldal
   if (loading) return <p className="p-6">Betöltés...</p>;
 
@@ -36,6 +40,9 @@ export default function CreateListingPage() {
 
 async function handleSubmit(e: React.FormEvent) {
   e.preventDefault();
+
+  if (submitting) return;
+  setSubmitting(true);
 
   try {
     const token = localStorage.getItem("token");
@@ -94,7 +101,10 @@ async function handleSubmit(e: React.FormEvent) {
   } catch (err) {
     console.error("Create listing error:", err);
     alert("Hálózati hiba. Próbáld újra később.");
+  } finally {
+    setSubmitting(false);
   }
+
 }
 
 
@@ -127,6 +137,7 @@ async function handleSubmit(e: React.FormEvent) {
 
         <button
           type="submit"
+          disabled={submitting}
           className="bg-gray-800 text-white py-2 rounded hover:opacity-90 transition mt-2"
         >
           Mentés vázlatként

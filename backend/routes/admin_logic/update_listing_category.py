@@ -23,7 +23,7 @@ async def update_listing_category(
             detail="Listing not found",
         )
 
-    # category (child)
+    # category (child -> was changed later on to allow parent categories too)
     res = await db.execute(
         select(Category).where(Category.id == child_category_id)
     )
@@ -35,12 +35,6 @@ async def update_listing_category(
             detail="Invalid category",
         )
 
-    # guard: csak CHILD mehet fel
-    if category.parent_id is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Main category cannot be assigned directly",
-        )
 
     listing.category_id = category.id
     await db.commit()

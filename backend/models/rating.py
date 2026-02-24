@@ -32,8 +32,8 @@ class Rating(Base):
     # ⭐ csillagos értékelés (1–5)
     rating = Column(Integer, nullable=False)
 
-    # maximum 200 karakter (amit API-ban validálunk majd)
-    text = Column(String(200), nullable=True)
+    # maximum 1000 karakter (amit API-ban validálunk majd)
+    text = Column(String(1000), nullable=True)
 
     # válasz a tulajtól — opcionális
     owner_response = Column(String(200), nullable=True)
