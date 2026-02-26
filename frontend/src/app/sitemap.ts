@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const categoryRes = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/public/sitemap/category-slugs`,
-      { next: { revalidate: 3600 } }
+      { cache: "no-store" }
     )
 
     if (categoryRes.ok) {
@@ -55,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const listingRes = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/public/sitemap/listing-ids`,
-      { next: { revalidate: 3600 } }
+      { cache: "no-store" }
     )
 
     if (listingRes.ok) {
